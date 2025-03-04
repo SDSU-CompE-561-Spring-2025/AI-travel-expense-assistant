@@ -15,10 +15,29 @@
 
 TODO
 
-## Installation
+## Installation & Usage
+
+Download project dependencies 
 
 ```console
-pip install travel-buddy
+uv sync
+```
+
+Activate venv (Windows)
+```console
+.venv\Scripts\activate 
+```
+
+Activate venv (Linux)
+```console
+source .venv/bin/activate.fish
+```
+
+
+Start local webserver
+
+```console
+fastapi dev src/travel_buddy/main.py
 ```
 
 ## Project Members
