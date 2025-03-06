@@ -1,0 +1,223 @@
+openapi: 3.0.0
+info:
+  title: Travel API
+  version: 1.0.0
+paths:
+  /users/{id}:
+    get:
+      summary: Gets the current user's information
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users:
+    post:
+      summary: Creates a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Email:
+                  type: string
+                  format: email
+                Password:
+                  type: string
+                confirmaPassword:
+                  type: string
+              required:
+                - Email
+                - Password
+                - confirmaPassword
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /login:
+    post:
+      summary: Attempts a login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Email:
+                  type: string
+                Password:
+                  type: string
+              required:
+                - Email
+                - Password
+      responses:
+        '200':
+          description: Login successful
+
+  /logout:
+    put:
+      summary: Logs out
+      responses:
+        '200':
+          description: Logout successful
+
+  /trips:
+    get:
+      summary: Gets a list of trips
+      responses:
+        '200':
+          description: List of trips retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trip'
+
+    post:
+      summary: Creates a new trip
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+              required:
+                - Name
+                - start_date
+                - end_date
+      responses:
+        '201':
+          description: Trip created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+
+  /trips/{ID}:
+    get:
+      summary: Gets a trip by ID
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Trip information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+
+  /items:
+    get:
+      summary: Gets a list of items (hotel, flight, activity, etc.)
+      responses:
+        '200':
+          description: List of items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+
+    post:
+      summary: Creates an item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Name:
+                  type: string
+                typeID:
+                  type: string
+                link:
+                  type: string
+                date:
+                  type: string
+                  format: date
+              required:
+                - Name
+                - typeID
+                - link
+                - date
+      responses:
+        '201':
+          description: Item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        Email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    Trip:
+      type: object
+      properties:
+        ID:
+          type: string
+        Name:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+
+    Item:
+      type: object
+      properties:
+        ID:
+          type: string
+        Name:
+          type: string
+        typeID:
+          type: string
+        link:
+          type: string
+        date:
+          type: string
+          format: date
