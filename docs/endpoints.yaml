@@ -24,6 +24,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
+    delete:
+      summary: Removes a user
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User removed successfully
+        '404':
+          description: User not found
+
   /users:
     post:
       summary: Creates a user
@@ -154,6 +170,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/Trip'
 
+    delete:
+      summary: Removes a trip
+      tags:
+        - Trips
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Trip removed successfully
+        '404':
+          description: Trip not found
+
   # Item Endpoints (Hotel, Flight, Activity, etc.)
   /items:
     get:
@@ -202,6 +234,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Item'
+
+  /items/{ID}:
+    delete:
+      summary: Removes an item
+      tags:
+        - Items
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Item removed successfully
+        '404':
+          description: Item not found
 
 # Tags Section for Categorization
 tags:
