@@ -2,10 +2,14 @@ openapi: 3.0.0
 info:
   title: Travel API
   version: 1.0.0
+
 paths:
+  # User Endpoints
   /users/{id}:
     get:
       summary: Gets the current user's information
+      tags:
+        - Users
       parameters:
         - name: id
           in: path
@@ -23,6 +27,8 @@ paths:
   /users:
     post:
       summary: Creates a user
+      tags:
+        - Users
       requestBody:
         required: true
         content:
@@ -49,9 +55,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
+  # Authentication Endpoints
   /login:
     post:
       summary: Attempts a login
+      tags:
+        - Authentication
       requestBody:
         required: true
         content:
@@ -73,13 +82,18 @@ paths:
   /logout:
     put:
       summary: Logs out
+      tags:
+        - Authentication
       responses:
         '200':
           description: Logout successful
 
+  # Trip Endpoints
   /trips:
     get:
       summary: Gets a list of trips
+      tags:
+        - Trips
       responses:
         '200':
           description: List of trips retrieved successfully
@@ -92,6 +106,8 @@ paths:
 
     post:
       summary: Creates a new trip
+      tags:
+        - Trips
       requestBody:
         required: true
         content:
@@ -122,6 +138,8 @@ paths:
   /trips/{ID}:
     get:
       summary: Gets a trip by ID
+      tags:
+        - Trips
       parameters:
         - name: ID
           in: path
@@ -136,9 +154,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Trip'
 
+  # Item Endpoints (Hotel, Flight, Activity, etc.)
   /items:
     get:
       summary: Gets a list of items (hotel, flight, activity, etc.)
+      tags:
+        - Items
       responses:
         '200':
           description: List of items retrieved successfully
@@ -151,6 +172,8 @@ paths:
 
     post:
       summary: Creates an item
+      tags:
+        - Items
       requestBody:
         required: true
         content:
@@ -180,6 +203,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Item'
 
+# Tags Section for Categorization
+tags:
+  - name: Users
+    description: Endpoints related to user management.
+  - name: Authentication
+    description: Endpoints related to login and logout.
+  - name: Trips
+    description: Endpoints for managing trips.
+  - name: Items
+    description: Endpoints for managing travel-related items such as hotels, flights, and activities.
+
+# Data Models
 components:
   schemas:
     User:
