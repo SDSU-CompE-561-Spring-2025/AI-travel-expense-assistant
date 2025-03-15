@@ -8,11 +8,13 @@ from travel_buddy.core.config import settings
 # TODO: ENSURE .ENV FILE IN ROOT IS SETUP WITH DATABASE_URL
 SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
 
-# Engine: Acts as the core interface to the database in SQLAlchemy
-# When specifying an URL, a temporary database is created 
+# Engine: Acts as the core interface to the database in SQLAlchemy. When specifying an URL, a temporary database is created
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, 
     connect_args={"check_same_thread": False})
+
+# Starts database session to allow database interaction 
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Will be used to define database models in models directory
 Base = declarative_base()

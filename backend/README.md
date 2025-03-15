@@ -8,7 +8,7 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Installation](#installation-&-usage)
+- [Installation & Usage](#installation-&-usage)
 - [Project Members](#project-members)
 
 ## Introduction
