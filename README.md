@@ -9,6 +9,7 @@
 
 - [Introduction](#introduction)
 - [Installation](#installation)
+- [Developer Usage](#developer-usage)
 - [Project Members](#project-members)
 
 ## Introduction
@@ -17,28 +18,21 @@ This travel planning application helps users plan, manage, and organize trips. T
 
 ## Installation & Usage
 
-Download project dependencies 
+Clone the repository! 
 
-```console
-uv sync
+With SSH
+```console 
+git clone git@github.com:SDSU-CompE-561-Spring-2025/AI-travel-expense-assistant.git
 ```
 
-Activate venv (Windows)
+With HTTPS
 ```console
-.venv\Scripts\activate 
+git clone https://github.com/SDSU-CompE-561-Spring-2025/AI-travel-expense-assistant.git
 ```
 
-Activate venv (Linux)
-```console
-source .venv/bin/activate.fish
-```
+## Developer Usage
 
-
-Start local webserver
-
-```console
-fastapi dev src/travel_buddy/main.py
-```
+Readme files included for each section, have a look! 
 
 ## Project Members
 
