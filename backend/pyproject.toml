@@ -25,9 +25,12 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-    "fastapi>=0.115.11",
+    "fastapi[all]",
     "pre-commit>=3.5.0",
+    "pydantic-settings>=2.8.1",
+    "python-dotenv>=1.0.1",
     "ruff>=0.9.9",
+    "sqlalchemy>=2.0.39",
 ]
 
 [project.urls]
@@ -43,6 +46,10 @@ path = "src/travel_buddy/__about__.py"
 python = "3.12"
 installer = "uv"
 path = ".venv"
+
+[tool.hatch.envs.default.scripts]
+# Default environment scripts for development
+dev = "fastapi dev {args:src/travel_buddy/main.py}"
 
 [tool.hatch.envs.types]
 installer = "uv"

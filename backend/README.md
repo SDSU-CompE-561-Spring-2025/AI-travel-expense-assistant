@@ -17,25 +17,40 @@ This is the backend section, containing all things backend!
 
 ## Installation & Usage
 
-Download project dependencies 
+Start by opening a terminal in the backend directory. Then do the Following.
 
+Download/Setup project dependencies and environment.
 ```console
-uv sync
+hatch shell
 ```
 
-Activate venv (Windows)
+Create .env file to define used secret/non-secret variables. It should have these variables in it. 
 ```console
-.venv\Scripts\activate 
+DATABASE_URL = "sqlite:///./sql_travel_buddy.db"
+SECRET_KEY = ""
 ```
 
-Activate venv (Linux)
+Once the above is completed. Start local webserver:
 ```console
-source .venv/bin/activate
+hatch run dev
 ```
 
-Start local webserver
+OR 
+
 ```console
 make start-local
+```
+
+Run hatch other created scripts:
+```console
+hatch run <script_name>
+```
+
+Write scripts in the .toml file.
+
+Add project dependencies:
+```console
+uv add <package>
 ```
 
 ## Project Members
