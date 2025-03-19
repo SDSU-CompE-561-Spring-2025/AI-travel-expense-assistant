@@ -1,0 +1,16 @@
+@import "tailwindcss";
+/* 
+  branded: {
+            600: "#C6AFEE",
+            900: "#7D43E1",
+          }, */
+
+
+  /* @theme {
+    --color-mint-500: oklch(0.72 0.11 178);
+  }Vkk */
+
+  @theme {
+    --color-branded-600: rgb(198, 175, 238, 1);
+    --color-branded-900: rgb(125, 67, 225, 1);
+  }
