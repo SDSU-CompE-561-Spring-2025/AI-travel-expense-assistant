@@ -5,7 +5,7 @@ export default function Home() {
       <>
       <Navbar/>
       <main className="flex flex-col gap-[32px] row-start-  items-center sm:items-start">
-        Home
+        Reccomendations
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
       </footer>
