@@ -15,6 +15,12 @@
 
 This is the backend section, containing all things backend!
 
+This project's backend uses:
+- FastAPI
+- Python
+- PostgreSQL
+- hatch/uv (optional)
+
 ## Installation & Usage
 
 Start by opening a terminal in the backend directory. Then do the Following.
