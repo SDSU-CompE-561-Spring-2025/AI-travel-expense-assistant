@@ -5,7 +5,6 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Installation & Usage](#installation-&-usage)
 - [Getting Started](#getting-started)
 - [Project Members](#project-members)
 
