@@ -26,6 +26,7 @@ classifiers = [
 ]
 dependencies = [
     "fastapi[all]",
+    "phonenumbers>=9.0.1",
     "pre-commit>=3.5.0",
     "pydantic-settings>=2.8.1",
     "python-dotenv>=1.0.1",
