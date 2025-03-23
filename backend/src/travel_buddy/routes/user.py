@@ -10,12 +10,11 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-@router.post("/register")
+@router.post("/{id}}")
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
+    return new_user
 
-    return
-
-@router.delete("/remove")
+@router.delete("/{id}")
 def delete_user():
 
     return
