@@ -25,7 +25,9 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
+    "bcrypt<4.0",
     "fastapi[all]",
+    "passlib>=1.7.4",
     "phonenumbers>=9.0.1",
     "pre-commit>=3.5.0",
     "pydantic-settings>=2.8.1",
