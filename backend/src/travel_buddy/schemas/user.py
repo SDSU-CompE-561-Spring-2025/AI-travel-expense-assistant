@@ -12,7 +12,23 @@ class UserBase(BaseModel):
 # Validate user input for password password, specifically for user registration
 class UserCreate(UserBase):
     password: constr(min_length=8, max_length=64)
-    phone_number: Optional[str] = None
+    phone_number: Optional[str] = Field(
+        default=None,
+        example="+14155552671",  # E.164 format
+        description="Phone number in international E.164 format"
+        )
+
+    @field_validator("phone_number")
+    def validate_phone_number(cls, value):
+        if value is None:
+            return value
+        try:
+            number = parse(value, "US")
+            if not is_valid_number(number):
+                raise ValueError("Invalid phone number")
+            return format_number(number, PhoneNumberFormat.E164)
+        except NumberParseException:
+            raise ValueError("Could not parse phone number")
 
 # Validate a full user object based off user inputs 
 class User(UserBase):
@@ -24,12 +40,14 @@ class User(UserBase):
 
     @field_validator("phone_number")
     def validate_phone_number(cls, value):
+        if value is None:
+            return value
         try:
-            number = phonenumbers.parse(value, "US")  # Change "US" to your region
-            if not phonenumbers.is_valid_number(number):
+            number = parse(value, "US")
+            if not is_valid_number(number):
                 raise ValueError("Invalid phone number")
-            return phonenumbers.format_number(number, phonenumbers.PhoneNumberFormat.E164)
-        except phonenumbers.NumberParseException:
+            return format_number(number, PhoneNumberFormat.E164)
+        except NumberParseException:
             raise ValueError("Could not parse phone number")
 
     # For retrieving user data from the database later on
@@ -41,6 +59,7 @@ class UserResponse(BaseModel):
     username: constr(min_length=3, max_length=50, pattern=r"^[a-zA-Z0-9_]+$")
     email: EmailStr
     created_at: datetime
+    phone_number: Optional[str] = None  
 
     # For retrieving user data from the database later on
     class Config:
