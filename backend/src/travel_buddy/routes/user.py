@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-@router.post("/register", response_class=UserResponse)
+@router.post("/register", response_model=UserResponse)
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user, conflict_field = user_service.create_user(db = db, user = user)
 
@@ -37,7 +37,7 @@ def delete_user(id: int, db: Session = Depends(get_db)):
         )
     return result
 
-@router.get("/{id}", response_class=UserResponse)
+@router.get("/{id}", response_model=UserResponse)
 def get_user(id: int, db: Session = Depends(get_db)):
     result = user_service.get_user_by_id(db=db, user_id=id)
 
@@ -50,7 +50,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
     
     return result
 
-@router.get("/by-username/{username}", response_class=UserResponse)
+@router.get("/by-username/{username}", response_model=UserResponse)
 def get_user_by_username(username: str, db: Session = Depends(get_db)):
     result = user_service.get_user_by_username(db=db, username=username)
 
