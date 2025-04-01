@@ -12,6 +12,7 @@ class UserBase(BaseModel):
 # Validate user input for password password, specifically for user registration
 class UserCreate(UserBase):
     password: constr(min_length=8, max_length=64)
+    phone_number: Optional[str] = None
 
 # Validate a full user object based off user inputs 
 class User(UserBase):
