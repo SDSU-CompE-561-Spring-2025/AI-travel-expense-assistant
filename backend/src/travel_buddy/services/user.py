@@ -16,9 +16,9 @@ settings = get_settings()
 
 # Create, Read, Update, Delete Operations
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")   # TODO: Finish/double check password auth implementation     
 
-def get_password_hash(password: str):
+def get_password_hash(password: str):                               # TODO: Finish/double check password auth implementation       
     return pwd_context.hash(password)
 
 def create_user(db: Session, user: UserCreate) -> tuple[User, Optional[str]]:
@@ -42,12 +42,12 @@ def create_user(db: Session, user: UserCreate) -> tuple[User, Optional[str]]:
         if db.query(User).filter(User.phone_number == user.phone_number).first():
             return None, "phone_number"
 
-    hashed_password = get_password_hash(user.password)                # TODO: Write get_password_hash in, Uncomment once implementerd     
+    hashed_password = get_password_hash(user.password)                # TODO: Finish/double check password auth implementation       
     
     db_user = User(
         username = user.username,
         email = user.email,
-        password_hash = hashed_password,                              # TODO: Write get_password_hash in, Uncomment once implementerd     
+        password_hash = hashed_password,                              # TODO: Finish/double check password auth implementation       
         phone_number = user.phone_number,
     )
 
