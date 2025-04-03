@@ -1,26 +1,75 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 
-
-from travel_buddy.schemas.user import UserResponse, UserCreate
-
+from travel_buddy.schemas.user import UserResponse, UserCreate, UserUpdate, UserUpdateResponse
 from travel_buddy.dependencies import get_db
+import travel_buddy.services.user as user_service
 
 from sqlalchemy.orm import Session
 
 
 router = APIRouter()
 
-@router.post("/register")
+@router.post("/register", response_model=UserResponse)
 def register_user(user: UserCreate, db: Session = Depends(get_db)):
+    new_user, conflict_field = user_service.create_user(db = db, user = user)
 
-    return
+    if not new_user:
+        # User not created due to some conflict
+        if conflict_field == "email":
+            detail = "Email is already in use."
+        elif conflict_field == "phone_number":
+            detail = "Phone number is already in use."
+        else:
+            detail = "Conflict in user data."
+        raise HTTPException(status_code=400, detail=detail)
+    
+    return new_user
 
-@router.delete("/remove")
-def delete_user():
+@router.delete("/{id}")
+def delete_user(id: int, db: Session = Depends(get_db)):
+    result = user_service.delete_user(db = db, user_id=id)
 
-    return
+    if not result:
+        # The detail will be returned if 
+        raise HTTPException(
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail = f'User with ID {id} not found.' 
+        )
+    return result
 
-@router.get("/{id}")
-def get_user():
+@router.get("/{id}", response_model=UserResponse)
+def get_user(id: int, db: Session = Depends(get_db)):
+    result = user_service.get_user_by_id(db=db, user_id=id)
 
-    return
+    if not result:
+    # The detail will be returned if not found
+        raise HTTPException(
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    return result
+
+@router.get("/by-username/{username}", response_model=UserResponse)
+def get_user_by_username(username: str, db: Session = Depends(get_db)):
+    result = user_service.get_user_by_username(db=db, username=username)
+
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    return result
+
+@router.put("/{id}", response_model=UserUpdateResponse)
+def update_user(id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
+    result = user_service.update_user(db=db, user_id=id, user_update=user_update)
+
+    if not result:
+        raise HTTPException(
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail = f'User with ID {id} not found.' 
+        )
+    
+    return result
