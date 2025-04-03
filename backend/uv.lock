@@ -1712,6 +1712,8 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "ruff" },
     { name = "sqlalchemy" },
+    { name = "uvicorn", version = "0.33.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.9'" },
+    { name = "uvicorn", version = "0.34.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.9'" },
 ]
 
 [package.metadata]
@@ -1726,6 +1728,7 @@ requires-dist = [
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "ruff", specifier = ">=0.9.9" },
     { name = "sqlalchemy", specifier = ">=2.0.39" },
+    { name = "uvicorn", specifier = ">=0.33.0" },
 ]
 
 [[package]]
