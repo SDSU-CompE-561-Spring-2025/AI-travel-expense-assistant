@@ -3,6 +3,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from travel_buddy.schemas.user import UserResponse, UserCreate, UserUpdate, UserUpdateResponse
 from travel_buddy.dependencies import get_db
 import travel_buddy.services.user as user_service
+from travel_buddy.core.authentication import oauth2_scheme, decode_access_token
+from travel_buddy.schemas.token import TokenData
+
 
 from sqlalchemy.orm import Session
 
@@ -24,6 +27,19 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail=detail)
     
     return new_user
+
+@router.get("/me", response_model=UserResponse)
+def read_users_me(
+    db: Session = Depends(get_db),
+    token: str = Depends(oauth2_scheme)
+):
+    token_data: TokenData = decode_access_token(token)
+    user = user_service.get_user_by_username(db=db, username=token_data.username)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return user
 
 @router.delete("/{id}")
 def delete_user(id: int, db: Session = Depends(get_db)):
