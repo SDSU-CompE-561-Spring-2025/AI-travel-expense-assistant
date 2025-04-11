@@ -18,6 +18,10 @@ def create_trip(db: Session, trip: TripCreate, user: User):
         end_date = trip.end_date,
         description = trip.description
     )
+
+    db.add(db_trip)
+    db.commit()
+    db.refresh(db_trip)
     return db_trip
 
 def get_trips(db: Session, user: User):
