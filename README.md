@@ -90,6 +90,34 @@ The application is containerized using Docker Compose, which sets up the fronten
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
 
+### Docker Architecture
+
+The application uses a multi-container architecture with the following services:
+
+1. **Frontend (Next.js)**
+   - Serves the user interface
+   - Built with Next.js and React
+   - Runs on port 3000
+
+2. **Backend (FastAPI)**
+   - Handles API requests
+   - Built with FastAPI and Python
+   - Runs on port 8000
+
+3. **Database (PostgreSQL)**
+   - Stores application data
+   - Runs on port 5432
+
+The containers are orchestrated using Docker Compose, which manages the networking between services and ensures they start in the correct order. The database container is configured to initialize with the necessary schema and data.
+
+### Environment Configuration
+
+Each service has its own environment configuration:
+
+- **Frontend**: Uses `.env.local` for environment variables
+- **Backend**: Uses `.env` for environment variables
+- **Database**: Uses environment variables in the Docker Compose file
+
 ## Credentials
 
 ### Database Credentials (PostgreSQL)
