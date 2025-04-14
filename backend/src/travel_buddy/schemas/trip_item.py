@@ -1,10 +1,10 @@
 from pydantic import BaseModel, constr, Field, HttpUrl
 from typing import Optional
 from datetime import datetime
-from enum import Enum
+import enum
 
 # Also in models
-class ItemType(str, Enum):
+class ItemType(str, enum.Enum):
     accommodation = "accommodation"
     transportation = "transportation"
     activity = "activity"
