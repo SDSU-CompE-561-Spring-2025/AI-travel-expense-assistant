@@ -16,3 +16,4 @@ class User(Base):
     phone_number = Column(String, unique=True, index=True)
     created_at = Column(DateTime, default=datetime.now(UTC))
 
+    trips = relationship("Trip", back_populates="user")
