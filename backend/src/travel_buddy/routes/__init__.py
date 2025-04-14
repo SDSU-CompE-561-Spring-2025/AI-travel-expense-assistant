@@ -19,11 +19,11 @@ api_router.include_router(
     tags=["Trip"]
     )
 
-'''
+
 api_router.include_router(
     trip_item.router, 
     prefix="/item", 
     tags=["Item"]
     )
-'''
+
 

@@ -4,7 +4,7 @@ from travel_buddy.core.database import Base
 from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import relationship
 
-class ItemType(enum.Enum):
+class ItemType(str, Enum):
     accommodation = "accommodation"
     transportation = "transportation"
     activity = "activity"
@@ -13,7 +13,7 @@ class ItemType(enum.Enum):
 class Item(Base):
     __tablename__ = "items"
 
-    item_id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
+    id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     trip_id = Column(Integer, ForeignKey("trips.trip_id"))
     title = Column(String, nullable=False) # false = Required
     date = Column(DateTime, nullable=False, default=datetime.now(UTC))
