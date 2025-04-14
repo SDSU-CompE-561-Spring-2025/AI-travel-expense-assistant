@@ -10,7 +10,7 @@ import travel_buddy.services.user as user_service
 
 router = APIRouter()
 
-@router.post("/", response_model=TripResponse)
+@router.post("/new", response_model=TripResponse)
 def create_trip(
     trip: TripCreate,
     db: Session = Depends(get_db),

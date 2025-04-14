@@ -120,6 +120,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Trip'
 
+  /new:
     post:
       summary: Creates a new trip
       tags:
