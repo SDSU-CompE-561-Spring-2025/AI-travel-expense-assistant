@@ -30,6 +30,10 @@ def get_trips(db: Session, user: User):
 def get_trip_by_id(db: Session, id: int):
     return db.query(Trip).filter(Trip.id == id).first()
 
+def update_trip(db: Session, id: int, newTrip: Trip):
+    trip = db.query(Trip).filter(Trip.id==id).first()
+    return
+
 def delete_trip(db: Session, id: int):
     trip = get_trip_by_id(Session, id)
     if not trip:

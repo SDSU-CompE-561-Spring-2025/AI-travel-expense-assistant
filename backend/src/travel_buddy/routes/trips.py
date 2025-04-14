@@ -10,7 +10,7 @@ import travel_buddy.services.user as user_service
 
 router = APIRouter()
 
-@router.post("/", response_model=TripResponse)
+@router.post("/trips", response_model=TripResponse)
 def create_trip(
     trip: TripCreate,
     db: Session = Depends(get_db),
@@ -37,6 +37,13 @@ def get_trip_by_id(
     id: int=-1
 ):
     return trip_service.get_trip_by_id(db,id)
+
+@router.put("/trips/{id}", response_model=TripResponse)
+def update_trip(
+    db: Session = Depends(get_db),
+    id: int=-1
+):
+    return trip_service.update_trip(db,id)
 
 @router.delete("/trips/{id}",response_model=TripResponse)
 def delete_trip(

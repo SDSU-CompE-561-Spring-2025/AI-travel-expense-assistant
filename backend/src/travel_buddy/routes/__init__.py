@@ -12,3 +12,16 @@ api_router.include_router(
     )
 
 # api_router.include_router(category.router, prefix="/category", tags=["Category"])
+
+api_router.include_router(
+    user.router, 
+    prefix="/trip", 
+    tags=["Trip"]
+    )
+
+api_router.include_router(
+    user.router, 
+    prefix="/item", 
+    tags=["Item"]
+    )
+
