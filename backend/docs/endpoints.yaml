@@ -151,13 +151,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Trip'
 
-  /trips/{ID}:
+  /trips/{id}:
     get:
-      summary: Gets a trip by ID
+      summary: Gets a trip by id
       tags:
         - Trips
       parameters:
-        - name: ID
+        - name: id
           in: path
           required: true
           schema:
@@ -175,7 +175,7 @@ paths:
       tags:
         - Trips
       parameters:
-        - name: ID
+        - name: id
           in: path
           required: true
           schema:
@@ -235,13 +235,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Item'
 
-  /items/{ID}:
+  /items/{id}:
     delete:
       summary: Removes an item
       tags:
         - Items
       parameters:
-        - name: ID
+        - name: id
           in: path
           required: true
           schema:
