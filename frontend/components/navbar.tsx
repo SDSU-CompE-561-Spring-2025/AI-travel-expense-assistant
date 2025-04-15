@@ -23,7 +23,9 @@ const Navbar = () => {
                   <Link href="/recommendations">Recommendations</Link>
 
               </div>
-              <span>support</span>
+              <span>
+                <Link href="/support">Support</Link>
+              </span>
           </div> 
       </nav>
     )
