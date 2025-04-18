@@ -1,5 +1,7 @@
-import React from 'react';
-import Link from 'next/link';
+"use client"
+
+import React from 'react'
+import Link from 'next/link'
 import { useState } from "react"
 //import { useChat } from "ai/react"
 import { Send } from "lucide-react"
