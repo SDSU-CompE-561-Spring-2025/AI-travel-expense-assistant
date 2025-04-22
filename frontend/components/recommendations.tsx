@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { useState } from "react"
+import { useEffect } from 'react'
 import { useChat } from "@ai-sdk/react"
 import { Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -16,6 +17,11 @@ export default function RecommendationsPage() {
     const [destination, setDestination] = useState("")
     const [recommendations, setRecommendations] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(false)
+    const [hasMounted, setHasMounted] = useState(false)
+
+    useEffect(() => {
+        setHasMounted(true)
+    }, [])
   
     const { messages, input, handleInputChange, handleSubmit, setInput } = useChat({
       api: "/api/recommendations",
@@ -89,16 +95,9 @@ export default function RecommendationsPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="h-[400px] overflow-y-auto mb-4 space-y-4">
-                            {messages.map((message) => (
-                                <div
-                                    key={message.id}
-                                    className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                                >
-                                    <div
-                                        className={`max-w-[80%] rounded-lg p-3 ${
-                                            message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
-                                        }`}
-                                    >
+                            {hasMounted && messages.map((message) => (
+                                <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+                                    <div className={`max-w-[80%] rounded-lg p-3 ${ message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                                         {message.content}
                                     </div>
                                 </div>
