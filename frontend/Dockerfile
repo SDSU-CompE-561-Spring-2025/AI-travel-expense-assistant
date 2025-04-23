@@ -39,14 +39,15 @@ ENV NEXT_TELEMETRY_DISABLED 1
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/.env.local ./.env.local
+# COPY --from=builder /app/.env.local ./.env.local
 
 # Debug: List files in the runner stage
 RUN ls -la
 RUN ls -la .next || echo ".next directory not found in runner stage"
 
 # Install production dependencies only
-RUN npm ci --only=production
+# RUN npm ci --omit=production
+RUN npm ci --omit=dev
 
 # Expose port
 EXPOSE 3000
