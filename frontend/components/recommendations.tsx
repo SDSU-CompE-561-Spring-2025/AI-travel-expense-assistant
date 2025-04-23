@@ -1,7 +1,6 @@
 "use client"
 
 import React from 'react'
-import Link from 'next/link'
 import { useState } from "react"
 import { useEffect } from 'react'
 import { useChat } from "@ai-sdk/react"
@@ -24,32 +23,49 @@ export default function RecommendationsPage() {
     }, [])
   
     const { messages, input, handleInputChange, handleSubmit, setInput } = useChat({
-      api: "/api/recommendations",
-      onFinish: (message) => {
-        setIsLoading(false)
-        try {
-          // Parse the recommendations from the AI response
-          const parsedData = JSON.parse(message.content)
-          if (Array.isArray(parsedData) && parsedData.length > 0) {
-            setRecommendations(parsedData)
-          }
-        } catch (error) {
-          console.error("Failed to parse recommendations:", error)
-        }
-      },
+        api: "/api/recommendations",
+        onResponse: async (response) => {
+            const data = await response.json()
+            console.log("🎯 Raw response data from API:", data)
+          },
+        onFinish: (message) => {
+            setIsLoading(false)
+            setDestination(input)
+            try {
+                console.log("AI raw message content:", message.content)
+
+                const cleaned = message.content
+                    .replace(/^```json\s*/, "") // removes ```json plus newline/space
+                    .replace(/```$/, "")        // removes trailing ```
+                    .trim()
+
+                // Parse the recommendations from the AI response
+                console.log("AI cleaned message content:", cleaned)
+                const parsedData = JSON.parse(cleaned)
+
+                console.log("setting recommendations")
+                setRecommendations(parsedData)
+                
+            } catch (error) {
+                console.error("❌ Failed to parse recommendations:", error)
+            }
+        },
     })
   
     const handleDestinationSubmit = (e: React.FormEvent) => {
-      e.preventDefault()
-      if (!destination.trim()) return
+        e.preventDefault()
+        if (!destination.trim()) return
   
-      setIsLoading(true)
-      setInput(destination)
-      handleSubmit(e)
-  
-      // Add user message to chat
-      const prompt = `Give me the top 3 recommended places to visit in ${destination}`
-      setInput(prompt)
+        setIsLoading(true)
+
+        // Add user message to chat
+        const prompt = `Give me the top 3 recommended places to visit in ${destination}`
+        setInput(prompt)
+        
+        setTimeout(() => {
+            handleSubmit(e)
+        }, 0)
+
     }
     
     return (
@@ -69,8 +85,6 @@ export default function RecommendationsPage() {
                                     key={index}
                                     title={rec.name}
                                     description={rec.description}
-                                    imageUrl={rec.imageUrl || `/placeholder.svg?height=200&width=300`}
-                                    rating={rec.rating}
                                 />
                             ))}
                         </div>
@@ -117,11 +131,11 @@ export default function RecommendationsPage() {
 
                         <Separator className="my-4" />
 
-                        <form onSubmit={handleDestinationSubmit} className="flex gap-2">
+                        <form onSubmit={handleSubmit} className="flex gap-2">
                             <Input
                                 placeholder="Where are you traveling to?"
-                                value={destination}
-                                onChange={(e) => setDestination(e.target.value)}
+                                value={input}
+                                onChange={handleInputChange}
                                 className="flex-1"
                             />
                             <Button type="submit" disabled={isLoading}>
