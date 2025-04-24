@@ -3,9 +3,12 @@
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { Button } from './ui/button';
-
+import { useEffect } from 'react';
 export default function Navbar() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, fetchUser, user } = useAuth();
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <nav className="w-full">
@@ -15,9 +18,15 @@ export default function Navbar() {
           <span className="text-lg text-branded-600">your simple travel assistant</span>
         </div>
         {isAuthenticated ? (
+          <>
+          <span>
+            {user?.username}
+          </span>
           <Button variant="outline" onClick={logout}>
             Logout
           </Button>
+
+          </>
         ) : (
           <Link href="/login">
             <Button className="text-white">Sign In</Button>

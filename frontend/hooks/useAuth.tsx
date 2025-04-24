@@ -2,9 +2,17 @@ import { useState, useEffect, createContext, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
+interface User {
+  created_at: string;
+  email: string;
+  id: number;
+  phone_number: string;
+  username: string;
+}
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: any | null;
+  user: User | null;
+  fetchUser: () => Promise<void>;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
@@ -15,7 +23,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -39,7 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       formData.append('username', username);
       formData.append('password', password);
 
-      const response = await fetch('http://localhost:8000/token', {
+      const response = await fetch('http://localhost:8000/user/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -54,7 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
       localStorage.setItem('access_token', data.access_token);
       setIsAuthenticated(true);
-      router.push('/dashboard');
+      router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during login');
       setIsAuthenticated(false);
@@ -62,6 +70,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
     }
   };
+
+  const fetchUser = async () => {
+    const response = await fetch('http://localhost:8000/user/me', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+      }
+    });
+    const data = await response.json();
+    console.log(data);
+    setUser(data);
+  }
+  
 
   const logout = () => {
     localStorage.removeItem('access_token');
@@ -77,6 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logout,
     loading,
     error,
+    fetchUser,
   };
   return (
     <AuthContext.Provider value={value}>
