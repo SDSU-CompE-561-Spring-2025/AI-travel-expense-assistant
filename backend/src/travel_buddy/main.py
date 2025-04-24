@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from travel_buddy.core.database import Base, engine
+from travel_buddy.routes import api_router
 from travel_buddy.routes import user, login
 
 # Creates our database tables based on models defined
@@ -17,6 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(api_router, prefix="")
 
 @app.get("/")
 def home():
