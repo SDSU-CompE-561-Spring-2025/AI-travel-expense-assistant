@@ -2,8 +2,8 @@
 
 import React from "react"
 import { useState } from "react"
-import { useEffect } from "react"
-import { useChat } from "@ai-sdk/react"
+//import { useEffect } from "react"
+//import { useChat } from "@ai-sdk/react"
 import { Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
