@@ -1,6 +1,7 @@
 import { google } from "@ai-sdk/google"
 import { generateText } from "ai"
 
+export const runtime = "edge"
 export const maxDuration = 30
 
 export async function POST(req: Request) {
@@ -43,11 +44,15 @@ export async function POST(req: Request) {
     //console.log("✅ API result:", response)
     //return toChatResponse(result)
     console.log("✅ Returning Gemini response:", result.text)
+    
+    
     return Response.json({
         id: crypto.randomUUID(),
         role: "assistant",
         content: result.text,
     })
+    
+   //return result.toDataStreamResponse()
 
     //return result.toDataStreamResponse()
     } catch (err) {

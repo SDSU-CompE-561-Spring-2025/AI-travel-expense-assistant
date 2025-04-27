@@ -1,8 +1,8 @@
 "use client"
 
-import React from 'react'
+import React from "react"
 import { useState } from "react"
-import { useEffect } from 'react'
+import { useEffect } from "react"
 import { useChat } from "@ai-sdk/react"
 import { Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -16,8 +16,11 @@ export default function RecommendationsPage() {
     const [destination, setDestination] = useState("")
     const [recommendations, setRecommendations] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(false)
-    const [hasMounted, setHasMounted] = useState(false)
+    //const [hasMounted, setHasMounted] = useState(false)
+    const [messages, setMessages] = useState<any[]>([])
+   
 
+    /*
     useEffect(() => {
         setHasMounted(true)
     }, [])
@@ -35,7 +38,7 @@ export default function RecommendationsPage() {
                 console.log("AI raw message content:", message.content)
 
                 const cleaned = message.content
-                    .replace(/^```json\s*/, "") // removes ```json plus newline/space
+                    //.replace(/^```json\s*, "") // removes ```json plus newline/space
                     .replace(/```$/, "")        // removes trailing ```
                     .trim()
 
@@ -51,7 +54,8 @@ export default function RecommendationsPage() {
             }
         },
     })
-  
+    */
+  /*
     const handleDestinationSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         if (!destination.trim()) return
@@ -67,6 +71,61 @@ export default function RecommendationsPage() {
         }, 0)
 
     }
+        */
+
+    const handleDestinationSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!destination.trim()) return
+    
+        setIsLoading(true)
+
+        // Safely snapshot the current destination
+        const destinationSnapshot = destination
+
+        // Clear input immediately for UX
+        //setDestination("")
+
+        // Add user message immediately
+        setMessages((prev) => [
+            ...prev,
+            { role: "user", content: destinationSnapshot }
+        ])
+    
+        try {
+          const response = await fetch("/api/recommendations", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              messages: [{ role: "user", content: destination }],
+            }),
+          })
+    
+          const data = await response.json()
+          console.log("✅ API response:", data)
+    
+          if (data && data.content) {
+            const cleaned = data.content
+              .replace(/^```json\s*/, "")
+              .replace(/```$/, "")
+              .trim()
+    
+            const parsed = JSON.parse(cleaned)
+            console.log("✅ Parsed recommendations:", parsed)
+    
+            if (Array.isArray(parsed)) {
+              setRecommendations(parsed)
+            } else {
+              console.warn("⚠️ Unexpected response format:", parsed)
+            }
+          }
+        } catch (err) {
+          console.error("❌ Failed to get recommendations:", err)
+        } finally {
+          setIsLoading(false)
+        }
+      }
     
     return (
         <main className="container mx-auto px-4 py-8">
@@ -79,7 +138,7 @@ export default function RecommendationsPage() {
                 {recommendations.length > 0 ? (
                     <div className="space-y-6">
                         <h2 className="text-2xl font-semibold">Top Recommendations for {destination}</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="flex flex-col gap-4">
                             {recommendations.map((rec, index) => (
                                 <RecommendationCard
                                     key={index}
@@ -109,7 +168,7 @@ export default function RecommendationsPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="h-[400px] overflow-y-auto mb-4 space-y-4">
-                            {hasMounted && messages.map((message) => (
+                            {messages.map((message) => (
                                 <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                                     <div className={`max-w-[80%] rounded-lg p-3 ${ message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                                         {message.content}
@@ -127,15 +186,20 @@ export default function RecommendationsPage() {
                                     </div>
                                 </div>
                             )}
+                            {/*{isLoading && (
+                                <div className="flex justify-center items-center h-full">
+                                <span>Loading...</span>
+                            </div>
+                            )}*/}
                         </div>
 
                         <Separator className="my-4" />
 
-                        <form onSubmit={handleSubmit} className="flex gap-2">
+                        <form onSubmit={handleDestinationSubmit} className="flex gap-2">
                             <Input
                                 placeholder="Where are you traveling to?"
-                                value={input}
-                                onChange={handleInputChange}
+                                value={destination}
+                                onChange={(e) => setDestination(e.target.value)}
                                 className="flex-1"
                             />
                             <Button type="submit" disabled={isLoading}>
