@@ -8,12 +8,12 @@ interface RecommendationCardProps {
 
 export default function RecommendationCard({ title, description}: RecommendationCardProps) {
   return (
-    <Card className="overflow-hidden h-full flex flex-col">
-        <CardHeader className="p-4 pb-2">
-            <h3 className="font-semibold text-lg line-clamp-1">{title}</h3>
+    <Card className="overflow-hidden h-full flex flex-col gap-1 p-3">
+        <CardHeader className="p-5 pb-1">
+            <h3 className="font-semibold text-lg mb-0.1">{title}</h3>
         </CardHeader>
-        <CardContent className="p-4 pt-0 flex-grow">
-            <p className="text-sm text-gray-500 line-clamp-3">{description}</p>
+        <CardContent className="p-5 pt-0 flex-grow">
+            <p className="text-sm text-gray-500 leading-tight line-clamp-3">{description}</p>
         </CardContent>
     </Card>
   )

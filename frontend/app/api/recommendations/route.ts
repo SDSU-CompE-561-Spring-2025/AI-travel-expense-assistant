@@ -21,8 +21,8 @@ export async function POST(req: Request) {
 
     // Create a system prompt that instructs the AI to return structured data
     const systemPrompt = `
-        You are a travel recommendation assistant. When given a destination, provide the top 3 recommended places to visit.
-        Return your response as a JSON array with exactly 3 items. Each item should have the following structure:
+        You are a travel recommendation assistant. When given a destination, provide the top 5 recommended places to visit.
+        Return your response as a JSON array with exactly 5 items. Each item should have the following structure:
         {
             "name": "Place Name",
             "description": "A brief 1-2 sentence description of the place"
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     `
 
     // Create a prompt that asks for recommendations for the specified destination
-    const prompt = `Give me the top 3 recommended places to visit in ${destination}`
+    const prompt = `Give me the top 5 recommended places to visit in ${destination}`
 
     const result = await generateText({
         model: google.chat("models/gemini-2.0-flash"),

@@ -2,13 +2,12 @@
 
 import React from "react"
 import { useState } from "react"
-//import { useEffect } from "react"
-//import { useChat } from "@ai-sdk/react"
 import { Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { v4 as uuidv4 } from "uuid";
 import RecommendationCard from "./recommendation-card"
 
 
@@ -18,60 +17,8 @@ export default function RecommendationsPage() {
     const [isLoading, setIsLoading] = useState(false)
     //const [hasMounted, setHasMounted] = useState(false)
     const [messages, setMessages] = useState<any[]>([])
+    const [destinationSnapshot, setDestinationSnapshot] = useState("")
    
-
-    /*
-    useEffect(() => {
-        setHasMounted(true)
-    }, [])
-  
-    const { messages, input, handleInputChange, handleSubmit, setInput } = useChat({
-        api: "/api/recommendations",
-        onResponse: async (response) => {
-            const data = await response.json()
-            console.log("🎯 Raw response data from API:", data)
-          },
-        onFinish: (message) => {
-            setIsLoading(false)
-            setDestination(input)
-            try {
-                console.log("AI raw message content:", message.content)
-
-                const cleaned = message.content
-                    //.replace(/^```json\s*, "") // removes ```json plus newline/space
-                    .replace(/```$/, "")        // removes trailing ```
-                    .trim()
-
-                // Parse the recommendations from the AI response
-                console.log("AI cleaned message content:", cleaned)
-                const parsedData = JSON.parse(cleaned)
-
-                console.log("setting recommendations")
-                setRecommendations(parsedData)
-                
-            } catch (error) {
-                console.error("❌ Failed to parse recommendations:", error)
-            }
-        },
-    })
-    */
-  /*
-    const handleDestinationSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!destination.trim()) return
-  
-        setIsLoading(true)
-
-        // Add user message to chat
-        const prompt = `Give me the top 3 recommended places to visit in ${destination}`
-        setInput(prompt)
-        
-        setTimeout(() => {
-            handleSubmit(e)
-        }, 0)
-
-    }
-        */
 
     const handleDestinationSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -80,15 +27,15 @@ export default function RecommendationsPage() {
         setIsLoading(true)
 
         // Safely snapshot the current destination
-        const destinationSnapshot = destination
+        setDestinationSnapshot(destination)
 
         // Clear input immediately for UX
-        //setDestination("")
+        setDestination("")
 
         // Add user message immediately
         setMessages((prev) => [
             ...prev,
-            { role: "user", content: destinationSnapshot }
+            { id: uuidv4(), role: "user", content: destination }
         ])
     
         try {
@@ -137,7 +84,7 @@ export default function RecommendationsPage() {
             <div className="lg:col-span-2">
                 {recommendations.length > 0 ? (
                     <div className="space-y-6">
-                        <h2 className="text-2xl font-semibold">Top Recommendations for {destination}</h2>
+                        <h2 className="text-2xl font-semibold">Top Recommendations for {destinationSnapshot}</h2>
                         <div className="flex flex-col gap-4">
                             {recommendations.map((rec, index) => (
                                 <RecommendationCard
@@ -161,13 +108,13 @@ export default function RecommendationsPage() {
             </div>
 
             <div>
-                <Card className="h-full">
+                <Card>
                     <CardHeader>
                         <CardTitle>Travel Assistant</CardTitle>
-                        <CardDescription>Ask for recommendations for any destination</CardDescription>
+                        <CardDescription>Ask for recommendations for any destination (region, city, county, etc)</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="h-[400px] overflow-y-auto mb-4 space-y-4">
+                        <div className="h-[320px] overflow-y-auto mb-4 space-y-4">
                             {messages.map((message) => (
                                 <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                                     <div className={`max-w-[80%] rounded-lg p-3 ${ message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
@@ -186,11 +133,6 @@ export default function RecommendationsPage() {
                                     </div>
                                 </div>
                             )}
-                            {/*{isLoading && (
-                                <div className="flex justify-center items-center h-full">
-                                <span>Loading...</span>
-                            </div>
-                            )}*/}
                         </div>
 
                         <Separator className="my-4" />
