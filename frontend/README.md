@@ -17,10 +17,28 @@ This project's frontend uses:
 - CSS with Shadcn_UI styling
 - TypeScript
 - React [Next.js](https://nextjs.org), [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app)
+- Node.js (need npm installed)
 
 ## Getting Started
 
-First, run the development server:
+Start by opening a terminal in the frontend directory. (make sure you ```cd frontend```)
+
+Download project dependencies and packages.
+```console
+npm install
+# or
+npm i
+```
+
+Create .env.local file within the overall frontend directory to store the API key for using Google gemini-2.0-flash for AI functionality.
+
+Go to [`this website`](https://aistudio.google.com/apikey) and create a Google API key. Then paste this in your .env.local file and replace the xxx's with your API key: 
+
+```console
+GOOGLE_GENERATIVE_AI_API_KEY=xxxxxxxxxxxxxx
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
