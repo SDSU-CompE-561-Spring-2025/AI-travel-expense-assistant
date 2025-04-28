@@ -1,6 +1,6 @@
-import {Navbar} from "@/components/navbar";
+import Navbar from "@/components/navbar";
 
-export default function Home() {
+export default function Calendar() {
   return (
       <>
       <Navbar/>

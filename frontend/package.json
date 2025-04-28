@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky"
+    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky; fi"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.12",
@@ -35,7 +35,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.2.3",
     "husky": "^9.1.7",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.1.4",
     "typescript": "^5"
   }
 }

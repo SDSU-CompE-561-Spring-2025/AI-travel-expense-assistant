@@ -1,7 +1,6 @@
 import {Navbar} from "@/components/navbar";
 import {RecommendationsPage} from "@/components/recommendations"
 
-
 export default function Home() {
   return (
       <>

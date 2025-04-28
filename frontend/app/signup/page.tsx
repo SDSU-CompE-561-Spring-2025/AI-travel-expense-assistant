@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Home() {
+
+   
   return (
       <main className="flex flex-col   min-h-screen w-full items-center bg-gradient-to-b from-branded-900 to-white">
         <div className="w-full flex">

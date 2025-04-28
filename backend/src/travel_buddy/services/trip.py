@@ -25,7 +25,7 @@ def create_trip(db: Session, trip: TripCreate, user: User):
     return db_trip
 
 def get_trips(db: Session, user: User):
-    return db.query(Trip).filter(Trip.user_id == user.id).all
+    return db.query(Trip).filter(Trip.user_id == user.id).all()
 
 def get_trip_by_id(db: Session, id: int):
     return db.query(Trip).filter(Trip.id == id).first()
