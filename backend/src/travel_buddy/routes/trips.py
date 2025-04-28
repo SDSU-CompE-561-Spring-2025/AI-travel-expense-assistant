@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter
 from travel_buddy.schemas.trip import TripCreate, TripResponse
 from travel_buddy.dependencies import get_db
@@ -21,7 +20,7 @@ def create_trip(
 
     return trip_service.create_trip(db, trip, user)
 
-@router.get("/trips", response_model=TripResponse)
+@router.get("/trips", response_model=list[TripResponse])
 def get_trips(
     db: Session = Depends(get_db),
     token: str = Depends(oauth2_scheme)

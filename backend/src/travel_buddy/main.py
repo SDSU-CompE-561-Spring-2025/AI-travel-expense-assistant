@@ -1,14 +1,23 @@
 from fastapi import FastAPI
-
+from fastapi.middleware.cors import CORSMiddleware
 from travel_buddy.core.database import Base, engine
 from travel_buddy.routes import api_router
+from travel_buddy.routes import user, login
 
 # Creates our database tables based on models defined
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Include Routes
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(api_router, prefix="")
 
 @app.get("/")
