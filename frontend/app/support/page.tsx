@@ -1,4 +1,5 @@
 import Navbar from "@/components/navbar";
+import Footer from "@/components/footer"
 
 export default function Home() {
   return (
@@ -7,8 +8,7 @@ export default function Home() {
       <main className="flex flex-col gap-[32px] row-start-  items-center sm:items-start">
         Support
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-      </footer>
+      <Footer />
       </>
   );
 }
