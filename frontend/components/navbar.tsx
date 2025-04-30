@@ -2,10 +2,13 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
+type NavbarProps = {
+  className?: string;
+};
 
-const Navbar = () => {
+const Navbar = ({className=""}: NavbarProps ) => {
     return (
- <nav className=" w-full">
+ <nav className={`relative w-full bg-white shadow-md ${className}`}>
         <div className="flex w-full px-8 py-4 justify-between items-center">
               <div className="flex  flex-col items-center gap-4 branded-600">
                 <h1 className="text-xl font-bold branded-600">Travel Buddy!</h1>
