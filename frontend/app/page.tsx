@@ -3,7 +3,7 @@ import Navbar from "@/components/navbar";
 import TripCard from "@/components/tripCard";
 import { Button } from "@/components/ui/button";
 import { useUserTrips } from "@/hooks/useTrips";
-
+import Link from "next/link";
 export default function Home() {
  const {trips, loading, error, refetch} = useUserTrips();
     console.log(trips);
@@ -19,9 +19,11 @@ export default function Home() {
         <span className="text-sm text-gray-500">
           Ready for a new adventure?
         </span>
-          <Button size="lg">
-            + Create a new trip
-          </Button>
+          <Link href="/new-trip">
+            <Button size="lg">
+              + Create a new trip
+            </Button>
+          </Link>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
       </footer>
