@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-interface Trip {
+ export interface Trip {
   description: string;
   end_date: string;
   id: number;
