@@ -29,7 +29,7 @@ export default function Footer() {
                 <span>info@travelbuddy.com</span>
               </div>
             </div>
-            {/*
+            {/* // Socials were depricated
             <div className="mt-6">
               <h4 className="text-sm font-semibold mb-2">Follow Us</h4>
               <div className="flex space-x-4">
@@ -62,29 +62,39 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4">Explore</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/destinations" className="text-slate-300 hover:text-[#A279EA] transition-colors">
-                  Destinations
+                <Link href="/" className="text-slate-300 hover:text-[#A279EA] transition-colors">
+                  Your Trips
                 </Link>
               </li>
               <li>
-                <Link href="/flights" className="text-slate-300 hover:text-[#A279EA] transition-colors">
-                  Flights
+                <Link href="/calendar" className="text-slate-300 hover:text-[#A279EA] transition-colors">
+                  Calendar View
                 </Link>
               </li>
               <li>
-                <Link href="/hotels" className="text-slate-300 hover:text-[#A279EA] transition-colors">
-                  Hotels
+                <Link href="/recommendations" className="text-slate-300 hover:text-[#A279EA] transition-colors">
+                  Recommendations
                 </Link>
               </li>
               <li>
-                <Link href="/car-rentals" className="text-slate-300 hover:text-[#A279EA] transition-colors">
-                  Car Rentals
-                </Link>
+                <a
+                  href="https://www.kayak.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-300 hover:text-[#A279EA] transition-colors"
+                >
+                  Flights/Hotels
+                </a>
               </li>
               <li>
-                <Link href="/vacation-packages" className="text-slate-300 hover:text-[#A279EA] transition-colors">
-                  Vacation Packages
-                </Link>
+                <a
+                  href="https://www.tripadvisor.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-300 hover:text-[#A279EA] transition-colors"
+                >
+                  Trip Advisor
+                </a>
               </li>
             </ul>
           </div>
@@ -94,12 +104,12 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4">Support</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/help-center" className="text-slate-300 hover:text-[#A279EA] transition-colors">
+                <Link href="/support" className="text-slate-300 hover:text-[#A279EA] transition-colors">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-slate-300 hover:text-[#A279EA] transition-colors">
+                <Link href="/support" className="text-slate-300 hover:text-[#A279EA] transition-colors">
                   FAQ
                 </Link>
               </li>
@@ -109,12 +119,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/booking-policy" className="text-slate-300 hover:text-[#A279EA] transition-colors">
-                  Booking Policy
-                </Link>
+              <a
+                  href="https://youtu.be/dQw4w9WgXcQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-300 hover:text-[#A279EA] transition-colors"
+                >
+                  Important Updates
+                </a>
               </li>
               <li>
-                <Link href="/about-us" className="text-slate-300 hover:text-[#A279EA] transition-colors">
+                <Link href="/about" className="text-slate-300 hover:text-[#A279EA] transition-colors">
                   About Us
                 </Link>
               </li>
