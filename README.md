@@ -81,6 +81,14 @@ Navigate to frontend directory and create a ```.env.local``` file. Paste the fol
    NODE_ENV="production"
 ```
 
+Also, store the API key for using Google gemini-2.0-flash for AI functionality in the same frontend/.env.local file.
+
+Go to [`this website`](https://aistudio.google.com/apikey) and create a Google API key. Then paste this in your .env.local file and replace the xxx's with your API key: 
+
+```console
+GOOGLE_GENERATIVE_AI_API_KEY=xxxxxxxxxxxxxx
+```
+
 Navigate to backend directory and create a ```.env``` file. Paste the following into the file:
 
 ```
