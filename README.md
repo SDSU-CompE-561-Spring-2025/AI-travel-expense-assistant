@@ -95,7 +95,7 @@ Navigate to backend directory and create a ```.env``` file. Paste the following 
 
 2. Build and start all services:
    ```console
-   docker compose up -d
+   docker-compose up --build
    ```
 
 3. To view logs:
