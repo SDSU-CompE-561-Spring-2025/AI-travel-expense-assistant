@@ -93,7 +93,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-slate-300 hover:text-[#A279EA] transition-colors"
                 >
-                  Trip Advisor
+                  Trip Advisor®
                 </a>
               </li>
             </ul>
@@ -114,8 +114,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-slate-300 hover:text-[#A279EA] transition-colors">
-                  Contact Us
+                <Link href="/doesnotexist" className="text-slate-300 hover:text-[#A279EA] transition-colors">
+                  Don't Contact Us
                 </Link>
               </li>
               <li>
