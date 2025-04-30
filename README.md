@@ -180,6 +180,7 @@ Each service has its own environment configuration:
 - **API URL**: `http://localhost:8000` (NEXT_PUBLIC_API_URL)
 - **App URL**: `http://localhost:3000` (NEXT_PUBLIC_APP_URL)
 - **Environment**: `production` (NODE_ENV)
+- **Gemini 2.0 Flash**: `generate with above instructions` (GOOGLE_GENERATIVE_AI_API_KEY)
 
 ### Backend Environment Variables
 - **Database URL**: `postgresql://travel_buddy:travel_buddy_pass@postgres:5432/travel_buddy_db` (DATABASE_URL)
