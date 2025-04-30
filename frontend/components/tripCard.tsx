@@ -1,4 +1,5 @@
 import { Trip } from "@/hooks/useTrips";
+import Link from "next/link";
 import { Card } from "./ui/card";
 import Image from "next/image";
 
@@ -14,6 +15,7 @@ const TripCard = (trip: Trip) => {
     const daysUntilTrip = getDaysUntilTrip();
 
     return (
+        <Link href={`/trips/${trip.id}`}>
         <Card className="overflow-hidden py-0">
             <div className="relative h-32 w-full rounded-t-lg overflow-hidden">
                 <Image 
@@ -40,6 +42,7 @@ const TripCard = (trip: Trip) => {
                 </div>
             </div>
         </Card>
+        </Link>
     )
 }
 
