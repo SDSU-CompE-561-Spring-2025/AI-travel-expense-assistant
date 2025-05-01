@@ -6,9 +6,10 @@ import { CalendarIcon, ArrowRightIcon, ChevronDown  } from "lucide-react"
 
 type ManageTripItemModalProps = {
     onClose: () => void;
+    tripID: number;
 };
 
-export default function ManageTripItemModal({ onClose }: ManageTripItemModalProps){
+export default function ManageTripItemModal({ onClose, tripID }: ManageTripItemModalProps){
     const [itemTitle, setItemTitle] = useState("");
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
@@ -17,13 +18,42 @@ export default function ManageTripItemModal({ onClose }: ManageTripItemModalProp
     const [activityDescription, setActivityDescription] = useState("");
     const [activityExternalLink, setActivityExternalLink] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log("Trip item created: ", {itemTitle});
 
         // TODO: Backend API call
+        const payload = {
+            title: itemTitle,
+            start_date: startDate?.toISOString().split("T")[0],
+            end_date: endDate?.toISOString().split("T")[0],
+            activity_type: activityType,
+            cost: parseFloat(activityCost),
+            description: activityDescription || null,
+            external_link: activityExternalLink || null,
+        };
 
-        onClose();
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) throw new Error("No auth token found!");
+
+            const response = await fetch(`http://localhost:8000/item/${tripID}/new`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if(!response.ok) throw new Error("Failed to create trip item!");
+            const data = await response.json();
+            console.log("Created: ", data);
+
+            onClose();
+        } catch (err) {
+            console.error("Error creating item: ", err)
+        }
     };
 
     return (
