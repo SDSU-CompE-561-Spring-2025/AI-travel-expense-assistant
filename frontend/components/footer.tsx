@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { MapPin, Mail, Phone, FacebookIcon, Instagram, Twitter, Youtube, Linkedin } from "lucide-react"
+import Policies from "./terms-stuff"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -146,21 +147,7 @@ export default function Footer() {
               © {currentYear} Travel Buddy. All rights reserved.
             </div>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-400">
-              <Link href="/terms" className="hover:text-[#A279EA] transition-colors">
-                Terms of Service
-              </Link>
-              <Link href="/privacy" className="hover:text-[#A279EA] transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="/cookies" className="hover:text-[#A279EA] transition-colors">
-                Cookie Policy
-              </Link>
-              <Link href="/accessibility" className="hover:text-[#A279EA] transition-colors">
-                Accessibility
-              </Link>
-              <Link href="/sitemap" className="hover:text-[#A279EA] transition-colors">
-                Sitemap
-              </Link>
+              <Policies />
             </div>
           </div>
         </div>
