@@ -7,26 +7,30 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
-interface EditTripProps {
-  trip: Trip;
-  onSave: (updatedTrip: Trip) => void;
-}
+export default function EditTrip(trip: Trip){
+  const [newTitle, setNewTitle] = useState(trip.title);
+  const [newDescription, setNewDescription] = useState(trip.description);
+  const [newStart, setNewStart] = useState(trip.start_date);
+  const [newEnd, setNewEnd] = useState(trip.end_date);
 
-const EditTrip: React.FC<EditTripProps> = ({ trip, onSave }) => {
-  const [title, setTitle] = useState(trip.title);
-  const [description, setDescription] = useState(trip.description);
-  const [startDate, setStartDate] = useState(trip.start_date);
+  const handleSave = () => {
+    // Call API to update trip
+    // try{
+    //   const response = await fetch(`/api/trips/${trip.id}`, {
+    //     method: "PUT",
+    //     headers: {"Content-Type": "application/json"},
+    //     body: JSON.stringify(updatedTrip)
+    //   });
+    //   if(!response.ok){
+    //       throw new Error("Failed to update trip");
+    //   }
+    //   const data = await response.json();
+    //   setTrip(data);
+    // }catch(error){
+    //   console.error("Error while updating trip:", error);
+    // }
+  }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const updatedTrip: Trip = {
-      ...trip,
-      title,
-      description,
-      start_date: startDate,
-    };
-    onSave(updatedTrip); // e.g., send to API or update state
-  };
 
   return (
     <Card className="p-6 max-w-md mx-auto">
@@ -40,13 +44,13 @@ const EditTrip: React.FC<EditTripProps> = ({ trip, onSave }) => {
         />
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form className="space-y-4">
         <div>
           <Label htmlFor="title">Title</Label>
           <Input
             id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
           />
         </div>
 
@@ -54,8 +58,8 @@ const EditTrip: React.FC<EditTripProps> = ({ trip, onSave }) => {
           <Label htmlFor="description">Description</Label>
           <Input
             id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
           />
         </div>
 
@@ -64,12 +68,24 @@ const EditTrip: React.FC<EditTripProps> = ({ trip, onSave }) => {
           <Input
             id="start_date"
             type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            value={newStart}
+            onChange={(e) => setNewStart(e.target.value)}
           />
         </div>
 
-        <Button type="submit">Save Changes</Button>
+        <div>
+          <Label htmlFor="end_date">End Date</Label>
+          <Input
+            id="end_date"
+            type="date"
+            value={newEnd}
+            onChange={(e) => setNewEnd(e.target.value)}
+          />
+        </div>
+
+        <Link href={`/trips/${trip.id}`}>
+          <Button onClick={handleSave} type="submit">Save Changes</Button>
+        </Link>
       </form>
 
       <div className="mt-4">
@@ -80,5 +96,3 @@ const EditTrip: React.FC<EditTripProps> = ({ trip, onSave }) => {
     </Card>
   );
 };
-
-export default EditTrip;

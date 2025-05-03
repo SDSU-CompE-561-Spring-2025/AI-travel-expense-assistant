@@ -24,7 +24,7 @@ def create_trip(db: Session, trip: TripCreate, user: User):
     db.refresh(db_trip)
     return db_trip
 
-def update_trip(db: Session, trip_id: int, user: User, newTrip: TripCreate):
+def update_trip(db: Session, trip_id: int, user: User, newTrip: Trip):
     trip = get_trip_by_id(Session, trip_id)
     trip.user_id = user.id,
     trip.title = newTrip.title,

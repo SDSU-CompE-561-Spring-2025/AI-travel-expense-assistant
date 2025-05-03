@@ -2,10 +2,13 @@ from fastapi import APIRouter
 from travel_buddy.schemas.trip import TripCreate, TripResponse
 from travel_buddy.dependencies import get_db
 from fastapi import Depends
+from sqlalchemy import DateTime
 from sqlalchemy.orm import Session
+from travel_buddy.models.trip import Trip
 from travel_buddy.core.authentication import oauth2_scheme, decode_access_token
 import travel_buddy.services.trip as trip_service
 import travel_buddy.services.user as user_service
+from datetime import datetime
 
 router = APIRouter()
 
@@ -42,8 +45,18 @@ def update_trip(
     db: Session = Depends(get_db),
     id: int=-1,
     token: str = Depends(oauth2_scheme),
-    newTrip: TripCreate = TripCreate()
+    newTitle: str = "",
+    newDescription: str = "",
+    newStartDate: DateTime = "",
+    newEndDate: DateTime = ""
 ):
+    newTrip = Trip()
+    newTrip.id = id
+    newTrip.title = newTitle
+    newTrip.description = newDescription
+    newTrip.start_date = newStartDate
+    newTrip.end_date = newEndDate
+
     username = decode_access_token(token)
     user = user_service.get_user_by_username(db,username)
     return trip_service.update_trip(db,id,user,newTrip)
