@@ -24,7 +24,7 @@ def create_item(
 
     trip = trip_service.get_trip_by_id(db, trip_id, user.id)  
 
-    return item_service.create_item(db, item, user)
+    return item_service.create_item(db, item, user, trip)
 
 
 # Get all items for a trip

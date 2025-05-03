@@ -37,6 +37,17 @@ def get_trip_by_id(
 ):
     return trip_service.get_trip_by_id(db,id)
 
+@router.put("/trips/{id}/edit", response_model=TripResponse)
+def update_trip(
+    db: Session = Depends(get_db),
+    id: int=-1,
+    token: str = Depends(oauth2_scheme),
+    newTrip: TripCreate = TripCreate()
+):
+    username = decode_access_token(token)
+    user = user_service.get_user_by_username(db,username)
+    return trip_service.update_trip(db,id,user,newTrip)
+
 @router.delete("/trips/{id}",response_model=TripResponse)
 def delete_trip(
     db: Session = Depends(get_db),
