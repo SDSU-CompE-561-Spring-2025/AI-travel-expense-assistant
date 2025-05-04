@@ -3,56 +3,50 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker"
 import { CalendarIcon, ArrowRightIcon, ChevronDown  } from "lucide-react"
+import { TripItem } from "@/lib/api/tripItems";
+import { useTripItems } from "@/hooks/useTripItems";
 
 type ManageTripItemModalProps = {
     onClose: () => void;
     tripID: number;
+    item?: TripItem;
 };
+  
 
-export default function ManageTripItemModal({ onClose, tripID }: ManageTripItemModalProps){
-    const [itemTitle, setItemTitle] = useState("");
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
-    const [activityType, setActivityType] = useState("");
-    const [activityCost, setActivityCost] = useState("");
-    const [activityDescription, setActivityDescription] = useState("");
-    const [activityExternalLink, setActivityExternalLink] = useState("");
+export default function ManageTripItemModal({ tripID, item, onClose }: ManageTripItemModalProps) {
+    const [itemTitle, setItemTitle] = useState<string>(item?.title ?? "");
+    const [startDate, setStartDate] = useState<Date | null>(item?.start_date ? new Date(item.start_date) : null);
+    const [endDate, setEndDate] = useState<Date | null>(item?.end_date ? new Date(item.end_date) : null);
+    const [activityType, setActivityType] = useState<string>(item?.item_type ?? "");
+    const [activityCost, setActivityCost] = useState<string>(item?.cost != null ? item.cost.toString() : "");
+    const [activityDescription, setActivityDescription] = useState<string>(item?.description ?? "");
+    const [activityExternalLink, setActivityExternalLink] = useState<string>(item?.web_link ?? "");
+
+    const { add, update } = useTripItems(tripID);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log("Trip item created: ", {itemTitle});
 
-        // TODO: Backend API call
         const payload = {
             title: itemTitle,
-            start_date: startDate?.toISOString().split("T")[0],
-            end_date: endDate?.toISOString().split("T")[0],
-            activity_type: activityType,
-            cost: parseFloat(activityCost),
-            description: activityDescription || null,
-            external_link: activityExternalLink || null,
-        };
+            start_date: startDate ? startDate.toISOString() : "",
+            end_date: endDate ? endDate.toISOString() : "", 
+            item_type: activityType as TripItem['item_type'],
+            cost: activityCost ? parseFloat(activityCost) : undefined,
+            description: activityDescription || undefined,
+            web_link: activityExternalLink || undefined,
+          };
 
-        try {
-            const token = localStorage.getItem("token");
-            if (!token) throw new Error("No auth token found!");
-
-            const response = await fetch(`http://localhost:8000/item/${tripID}/new`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload),
-            });
-
-            if(!response.ok) throw new Error("Failed to create trip item!");
-            const data = await response.json();
-            console.log("Created: ", data);
-
+          try {
+            if (item && item.id) {
+              await update(item.id, payload);
+            } else {
+              await add(payload);
+            }
             onClose();
-        } catch (err) {
-            console.error("Error creating item: ", err)
+            } catch (err) {
+            console.error("Error saving trip item:", err);
         }
     };
 
@@ -134,15 +128,10 @@ export default function ManageTripItemModal({ onClose, tripID }: ManageTripItemM
                             "
                         >
                             <option value="" disabled>Select one...</option>
-                            <option value="flight">Flight</option>
-                            <option value="hotel">Hotel</option>
-                            <option value="food">Food</option>
-                            <option value="shopping">Shopping</option>
-                            <option value="attraction">Attraction</option>
+                            <option value="accommodation">Accommodation</option>
+                            <option value="transportation">Transportation</option>
                             <option value="activity">Activity</option>
-                            <option value="drink">Drink</option>
-                            <option value="coffee">Coffee</option>
-                            <option value="other">Other...</option>
+                            <option value="other">Other</option>
                         </select>
 
                         <ChevronDown size={16} className="absolute top-1/2 right-2 -translate-y-1/2 text-gray-500 pointer-events-none"/>

@@ -53,4 +53,4 @@ RUN npm ci --omit=dev
 EXPOSE 3000
 
 # Command to run the application
-CMD ["npm", "run", "start"] 
+CMD ["npm", "run", "dev:webpack"] 

@@ -18,7 +18,8 @@ class Item(Base):
     id = Column(Integer, primary_key=True, index=True, nullable=False, autoincrement=True)
     trip_id = Column(Integer, ForeignKey("trips.id"))
     title = Column(String, nullable=False) # false = Required
-    date = Column(DateTime, nullable=False, default=datetime.now(UTC))
+    start_date = Column(DateTime, nullable=False, default=datetime.now(UTC))
+    end_date = Column(DateTime, nullable=False, default=datetime.now(UTC))
     item_type = Column(SQLEnum(ItemType), nullable=False)
     description = Column(String, nullable=True)
     cost = Column(Float, nullable = False)
