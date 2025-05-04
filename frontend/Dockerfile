@@ -1,56 +1,34 @@
-# Use Node.js LTS version
-FROM node:20-slim AS builder
+# Use an official Node.js runtime as a base image
+FROM node:20.10-alpine
 
 # Set working directory
-WORKDIR /app
+WORKDIR /usr/app
 
-# Copy package files
-COPY package*.json ./
+# Install PM2 globally
+RUN npm install --global pm2
+
+# Copy "package.json" and "package-lock.json" before other files
+# Utilise Docker cache to save re-installing dependencies if unchanged
+COPY ./package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
-# Copy the rest of the application
-COPY . .
+# Change ownership to the non-root user
+RUN chown -R node:node /usr/app
 
-# Set environment variables for the build
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
+# Copy all files
+COPY ./ ./
 
-# Debug: List files to ensure everything is copied
-RUN ls -la
+# Build app
+#RUN npm run build
 
-# Build the application with verbose output
-RUN npm run build --verbose
-
-# Debug: Check if .next directory exists and its contents
-RUN ls -la .next || echo ".next directory not found"
-
-# Production image, copy all the files and run next
-FROM node:20-slim AS runner
-
-WORKDIR /app
-
-# Set environment variables
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
-
-# Copy built assets from builder
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./
-# COPY --from=builder /app/.env.local ./.env.local
-
-# Debug: List files in the runner stage
-RUN ls -la
-RUN ls -la .next || echo ".next directory not found in runner stage"
-
-# Install production dependencies only
-# RUN npm ci --omit=production
-RUN npm ci --omit=dev
-
-# Expose port
+# Expose the listening port
 EXPOSE 3000
 
-# Command to run the application
-CMD ["npm", "run", "dev:webpack"] 
+# Run container as non-root (unprivileged) user
+# The "node" user is provided in the Node.js Alpine base image
+USER node
+
+# Launch app with PM2
+CMD [ "pm2-runtime", "start", "npm", "--", "run", "dev" ]
