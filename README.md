@@ -81,6 +81,14 @@ Navigate to frontend directory and create a ```.env.local``` file. Paste the fol
    NODE_ENV="production"
 ```
 
+Also, store the API key for using Google gemini-2.0-flash for AI functionality in the same frontend/.env.local file.
+
+Go to [`this website`](https://aistudio.google.com/apikey) and create a Google API key. Then paste this in your .env.local file and replace the xxx's with your API key: 
+
+```
+   GOOGLE_GENERATIVE_AI_API_KEY=xxxxxxxxxxxxxx
+```
+
 Navigate to backend directory and create a ```.env``` file. Paste the following into the file:
 
 ```
@@ -172,6 +180,7 @@ Each service has its own environment configuration:
 - **API URL**: `http://localhost:8000` (NEXT_PUBLIC_API_URL)
 - **App URL**: `http://localhost:3000` (NEXT_PUBLIC_APP_URL)
 - **Environment**: `production` (NODE_ENV)
+- **Gemini 2.0 Flash**: `generate with above instructions` (GOOGLE_GENERATIVE_AI_API_KEY)
 
 ### Backend Environment Variables
 - **Database URL**: `postgresql://travel_buddy:travel_buddy_pass@postgres:5432/travel_buddy_db` (DATABASE_URL)
