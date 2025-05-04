@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { MonthCalendar } from "./month-calendar"
+import { MonthCalendar } from "./ui/month-calendar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { ChevronLeft, ChevronRight, Plane, Map, Compass } from "lucide-react"
@@ -62,10 +62,12 @@ export function TravelCalendar() {
   const selectedDateEvents = selectedDate ? getEventsForDate(selectedDate) : []
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4 md:px-10 py-8">
       <div className="flex justify-between items-center">
-      <h1 className="text-3xl font-bold mb-2">Your travel timeline</h1>
-      <p className="text-gray-500 mb-8">An overview of your next adventures!</p>
+      <div>
+    <h1 className="text-3xl font-bold">Your travel timeline</h1>
+    <p className="text-gray-500 mt-1">An overview of your next adventures!</p>
+      </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={prevMonths}>
             <ChevronLeft className="h-4 w-4 mr-1" />
@@ -78,27 +80,7 @@ export function TravelCalendar() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {months.map((month, index) => (
-          <Card
-            key={`${month.getFullYear()}-${month.getMonth()}`}
-            className={`overflow-hidden transition-all duration-300 ${
-              focusedMonth === index ? "col-span-1 md:col-span-2 lg:col-span-3 shadow-lg" : ""
-            }`}
-          >
-            <MonthCalendar
-              month={month}
-              events={travelEvents}
-              onDateSelect={handleDateSelect}
-              selectedDate={selectedDate}
-              expanded={focusedMonth === index}
-              onToggleExpand={() => toggleFocusMonth(index)}
-            />
-          </Card>
-        ))}
-      </div>
-
-      {selectedDate && (
+      {selectedDate && ( // Selected date
         <Card className="p-4 mt-6">
           <div className="flex items-center mb-4">
             <Compass className="h-5 w-5 text-blue-500 mr-2" />
@@ -134,6 +116,28 @@ export function TravelCalendar() {
           )}
         </Card>
       )}
+
+      
+  
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {months.map((month, index) => (
+          <Card // Show Calendar grid
+            key={`${month.getFullYear()}-${month.getMonth()}`}
+            className={`overflow-hidden transition-all duration-300 ${
+              focusedMonth === index ? "col-span-1 md:col-span-2 lg:col-span-3 shadow-lg" : ""
+            }`}
+          >
+            <MonthCalendar
+              month={month}
+              events={travelEvents}
+              onDateSelect={handleDateSelect}
+              selectedDate={selectedDate}
+              expanded={focusedMonth === index}
+              onToggleExpand={() => toggleFocusMonth(index)}
+            />
+          </Card>
+        ))}
+      </div>
     </div>
   )
 }

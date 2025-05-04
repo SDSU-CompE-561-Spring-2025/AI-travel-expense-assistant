@@ -181,5 +181,5 @@ export function MonthCalendar({
     </div>
   )
 }
-export {TravelCalendar} from "./travel-calendar"
+export {TravelCalendar} from "../travel-calendar"
 
