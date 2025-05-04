@@ -1,98 +1,196 @@
-import React, { useState } from "react";
-import { Trip } from "@/hooks/useTrips";
-import Link from "next/link";
-import { Card } from "./ui/card";
-import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+"use client"
+import {useState} from "react"
+import {useForm} from "react-hook-form"
+import {zodResolver} from "@hookform/resolvers/zod"
+import * as z from "zod"
+import {cn} from "@/lib/utils"
+import {Button} from "@/components/ui/button"
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form"
+import {Input} from "@/components/ui/input"
+import {Textarea} from "@/components/ui/textarea"
+import {format} from "date-fns"
+import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
+import {Calendar} from "@/components/ui/calendar"
+import {Calendar as CalendarIcon} from "lucide-react"
+import {Trip} from "@/hooks/useTrips"
 
-export default function EditTrip(trip: Trip){
-  const [newTitle, setNewTitle] = useState(trip.title);
-  const [newDescription, setNewDescription] = useState(trip.description);
-  const [newStart, setNewStart] = useState(trip.start_date);
-  const [newEnd, setNewEnd] = useState(trip.end_date);
+//This form was made from shadecn's form builder
+const formSchema = z.object({
+  id: z.number(),
+  title: z.string().min(1),
+  description: z.string(),
+  start_date: z.coerce.date(),
+  end_date: z.coerce.date()
+});
 
-  const handleSave = () => {
-    // Call API to update trip
-    // try{
-    //   const response = await fetch(`/api/trips/${trip.id}`, {
-    //     method: "PUT",
-    //     headers: {"Content-Type": "application/json"},
-    //     body: JSON.stringify(updatedTrip)
-    //   });
-    //   if(!response.ok){
-    //       throw new Error("Failed to update trip");
-    //   }
-    //   const data = await response.json();
-    //   setTrip(data);
-    // }catch(error){
-    //   console.error("Error while updating trip:", error);
-    // }
+export default function MyForm(trip: Trip) {
+  const form = useForm < z.infer < typeof formSchema >> ({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      id: trip.id,
+      title: trip.title,
+      description: trip.description,
+      start_date: new Date(trip.start_date),
+      end_date: new Date(trip.end_date)
+    },
+  })
+
+  async function onSubmit(values: z.infer < typeof formSchema > ) {
+    try{
+        const response = await fetch(`http://localhost:8000/trips/${trip.id}`, {
+          method: "PUT",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(values)
+        });
+        if(!response.ok){
+            throw new Error("Failed to update trip");
+        }
+        const data = await response.json();
+      }catch(error){
+        console.error("Error while updating trip:", error);
+      }
   }
 
-
   return (
-    <Card className="p-6 max-w-md mx-auto">
-      <div className="relative h-32 w-full mb-4 rounded-lg overflow-hidden">
-        <Image
-          src="/pattern.png"
-          alt="Decorative pattern"
-          fill
-          className="object-cover"
-          priority
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
+        
+        <div className="grid grid-cols-12 gap-4">
+          
+          <div className="col-span-4">
+            
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input 
+                placeholder="Trip title"
+                
+                type=""
+                {...field} />
+              </FormControl>
+              
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-
-      <form className="space-y-4">
-        <div>
-          <Label htmlFor="title">Title</Label>
-          <Input
-            id="title"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-          />
+          </div>
+          
         </div>
-
-        <div>
-          <Label htmlFor="description">Description</Label>
-          <Input
-            id="description"
-            value={newDescription}
-            onChange={(e) => setNewDescription(e.target.value)}
-          />
+        
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Trip description"
+                  className="resize-none"
+                  {...field}
+                />
+              </FormControl>
+              
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <div className="grid grid-cols-12 gap-4">
+          
+          <div className="col-span-6">
+            
+      <FormField
+      control={form.control}
+      name="start_date"
+      render={({ field }) => (
+        <FormItem className="flex flex-col">
+          <FormLabel>Start Date</FormLabel>
+          <Popover>
+            <PopoverTrigger asChild>
+              <FormControl>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[240px] pl-3 text-left font-normal",
+                    !field.value && "text-muted-foreground"
+                  )}
+                >
+                  {field.value ? (
+                    format(field.value, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </FormControl>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={field.value}
+                onSelect={field.onChange}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+       
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+          </div>
+          
+          <div className="col-span-6">
+            
+      <FormField
+      control={form.control}
+      name="end_date"
+      render={({ field }) => (
+        <FormItem className="flex flex-col">
+          <FormLabel>End Date</FormLabel>
+          <Popover>
+            <PopoverTrigger asChild>
+              <FormControl>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[240px] pl-3 text-left font-normal",
+                    !field.value && "text-muted-foreground"
+                  )}
+                >
+                  {field.value ? (
+                    format(field.value, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </FormControl>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={field.value}
+                onSelect={field.onChange}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+       
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+          </div>
+          
         </div>
-
-        <div>
-          <Label htmlFor="start_date">Start Date</Label>
-          <Input
-            id="start_date"
-            type="date"
-            value={newStart}
-            onChange={(e) => setNewStart(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="end_date">End Date</Label>
-          <Input
-            id="end_date"
-            type="date"
-            value={newEnd}
-            onChange={(e) => setNewEnd(e.target.value)}
-          />
-        </div>
-
-        <Link href={`/trips/${trip.id}`}>
-          <Button onClick={handleSave} type="submit">Save Changes</Button>
-        </Link>
+        <Button type="submit">Submit</Button>
       </form>
-
-      <div className="mt-4">
-        <Link href={`/trips/${trip.id}`}>
-          <Button variant="outline">Cancel</Button>
-        </Link>
-      </div>
-    </Card>
-  );
-};
+    </Form>
+  )
+}
