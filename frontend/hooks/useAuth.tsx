@@ -9,6 +9,7 @@ interface User {
   phone_number: string;
   username: string;
 }
+
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
@@ -30,12 +31,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Check for existing token on mount
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      // TODO: Add token validation and user info fetch
-      setIsAuthenticated(true);
-    }
-    setLoading(false);
+    const init = async () => {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        try{
+          await fetchUser();
+          setIsAuthenticated(true);
+        } catch {
+          setIsAuthenticated(false);
+        }
+      }
+      setLoading(false);
+    };
+    init();
   }, []);
 
   const login = async (username: string, password: string) => {
@@ -62,6 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await response.json();
       localStorage.setItem('access_token', data.access_token);
       setIsAuthenticated(true);
+      await fetchUser();
       router.push('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during login');
@@ -72,12 +81,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const fetchUser = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) throw new Error('No token');
+
     const response = await fetch('http://localhost:8000/user/me', {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
       }
     });
-    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error('Unauthorized');
+    }
+
+    const data: User = await response.json();
     console.log(data);
     setUser(data);
   }
