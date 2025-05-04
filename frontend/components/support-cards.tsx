@@ -73,145 +73,63 @@ export default function SupportPage() {
             <AccordionItem value="item-1">
               <AccordionTrigger>How do I create a Travel Buddy account?</AccordionTrigger>
               <AccordionContent>
-                To create a Travel Buddy account, click on the "Sign Up" button in the top right corner of our homepage.
-                You can register using your email address, or sign up with your Google or Facebook account for quicker
-                access. Once registered, you'll be able to save trips, get personalized recommendations, and access all
-                of our planning tools.
+                To create a Travel Buddy account, click on the "Sign In" button in the top right corner of our homepage.
+                You will be taken to the Log in page, then at the bottom click the "No account yet? Sign up here" button at the bottom and
+                input your information. You can register using your email address. Once registered, you'll be able to save trips, get 
+                personalized recommendations, and access all of our planning tools. 
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="item-2">
               <AccordionTrigger>How do I plan a new trip?</AccordionTrigger>
               <AccordionContent>
-                After logging in, click on the "Create New Trip" button on your dashboard. Enter your destination,
-                travel dates, and any preferences you have. Our system will help you build an itinerary with recommended
-                attractions, accommodations, and activities based on your interests and budget. You can customize every
-                aspect of your trip and invite travel companions to collaborate on the planning.
+                After logging in, click on the "Create a new trip" button on your dashboard. Enter your destination,
+                travel dates, and a brief description. Then, when you hit submit, you will be taken to a page where you can 
+                add your trip's "items", which include accomodations, activities, and transportation. You can customize every
+                aspect of your trip and collaborate with our recommendations chat bot on the planning.
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="item-3">
               <AccordionTrigger>Can I book flights and hotels through Travel Buddy?</AccordionTrigger>
               <AccordionContent>
-                Yes! Travel Buddy partners with major airlines, hotel chains, and local accommodations worldwide. Once
-                you've planned your trip, you can book directly through our platform. We offer competitive rates and
-                special deals exclusive to Travel Buddy users. All bookings come with our price match guarantee and 24/7
-                support in case of any changes or emergencies.
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="item-4">
-              <AccordionTrigger>How do I access my travel documents?</AccordionTrigger>
-              <AccordionContent>
-                All your travel documents are securely stored in the "My Documents" section of your account. You can
-                upload boarding passes, hotel confirmations, tour tickets, and more. Our mobile app allows you to access
-                these documents offline, so you'll have everything you need even without internet connection. You can
-                also share specific documents with travel companions or export them as PDFs.
+                Nope. Sorry, this is purely an application to assist you with planning your trip from an organizational 
+                perspective, along with some personalized activity recommendations. For booking items, we recommend you check 
+                out our partner Kayak, which can be accessed through the "Flights/Hotels" link in the "Explore" section of the footer.
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="item-5">
-              <AccordionTrigger>What is the Travel Buddy cancellation policy?</AccordionTrigger>
+              <AccordionTrigger>How can I get reccomendations for my trips?</AccordionTrigger>
               <AccordionContent>
-                Our cancellation policy varies depending on the service provider. For flights and hotels, we adhere to
-                the policies of the airlines and accommodations. However, Travel Buddy Premium members receive
-                additional flexibility with free cancellation on select bookings up to 24 hours before check-in. For our
-                own services like custom itineraries and travel guides, we offer full refunds if canceled within 7 days
-                of purchase.
+                To get Travel Buddy's recommended places to visit for your desired trip location(s), navigate to the Recommendations 
+                page by clicking on the "Recommendations" link in the navigation menu or in the footer at the botton of any page. Then, 
+                type in your desired travel location (country, region, city, county, etc) into the chat window on the right and hit send. 
+                Our wonderful AI will then provide you with the top 5 best places to go in the area of your choice!
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="item-6">
-              <AccordionTrigger>Is my payment information secure?</AccordionTrigger>
+              <AccordionTrigger>How can I incorporate the recommendations into my trips?</AccordionTrigger>
               <AccordionContent>
-                Absolutely. Travel Buddy uses bank-level encryption to protect all your personal and payment
-                information. We are PCI DSS compliant and never store your complete credit card details on our servers.
-                You can also use secure payment options like PayPal, Apple Pay, or Google Pay for additional security.
-                We conduct regular security audits to ensure your data remains protected.
+                Once you Travel Buddy's wonderful AI recommendations, you can then navigate to one of our partners' websites, such as 
+                Kayak of Trip Advisor, to get more specifics on tours, tickets, and availability of these recommended places. You can find 
+                links to these at the bottom of any page or through a quick Google search. Then, navigate back here and input your selected 
+                item (tour, place, etc) through the "Add item" button that is at the top of the page after you click on you trip that you 
+                wish to add the activity to from the home page.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
         </section>
 
-        <Separator className="my-8" />
-
-        <section className="mb-16">
-          <h2 className="text-2xl font-bold mb-6">Support Resources</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-[#C6AFEE]">
-              <CardHeader>
-                <CardTitle>Travel Guides</CardTitle>
-                <CardDescription className="text-white">Access our comprehensive destination guides</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4 text-sm text-white">
-                  Explore detailed guides for popular destinations with insider tips, must-see attractions, and local
-                  recommendations.
-                </p>
-                <Link href="/guides" className="text-primary hover:underline">
-                  Browse Travel Guides →
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-[#C6AFEE]">
-              <CardHeader>
-                <CardTitle>Video Tutorials</CardTitle>
-                <CardDescription className="text-white">Learn how to use Travel Buddy features</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4 text-sm text-white">
-                  Watch step-by-step tutorials on how to plan trips, book accommodations, and make the most of our
-                  travel tools.
-                </p>
-                <Link href="/tutorials" className="text-primary hover:underline">
-                  Watch Tutorials →
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-[#C6AFEE]">
-              <CardHeader>
-                <CardTitle>Community Forum</CardTitle>
-                <CardDescription className="text-white">Connect with other travelers and share tips</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4 text-sm text-white">
-                  Join discussions with fellow travelers, ask questions, and share your own experiences and
-                  recommendations.
-                </p>
-                <Link href="/community" className="text-primary hover:underline">
-                  Join the Community →
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-[#C6AFEE]">
-              <CardHeader>
-                <CardTitle>Travel Tips</CardTitle>
-                <CardDescription className="text-white">Expert advice for seamless travel</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4 text-sm text-white">
-                  Discover practical tips on packing, navigating airports, finding deals, and making your travel
-                  experience stress-free.
-                </p>
-                <Link href="/tips" className="text-primary hover:underline">
-                  Read Travel Tips →
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
         <section>
-          <div className="bg-muted rounded-lg p-8 text-center">
+          <div className="bg-[#C6AFEE] rounded-lg p-8 text-center">
             <h2 className="text-2xl font-bold mb-4">Need Immediate Assistance?</h2>
-            <p className="text-muted-foreground mb-6">
+            <p className="text-white mb-6">
               For urgent matters related to current bookings, our priority support line is available 24/7.
             </p>
             <div className="text-xl font-semibold">+1 (555) 999-8888</div>
-            <p className="text-sm text-muted-foreground mt-2">For emergencies during travel only</p>
+            <p className="text-sm text-white mt-2">For emergencies during travel only</p>
           </div>
         </section>
       </div>
