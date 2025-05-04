@@ -13,7 +13,9 @@ export default function Home() {
       <main className="flex flex-col gap-3 mt-12 justify-center items-center ">
         <div className="flex  gap-4 w-full items-center justify-center">
           {trips.map((trip) => (
-            <TripCard key={trip.id} {...trip} />
+            <Link href={`/trips/${trip.id}`}>
+              <TripCard key={trip.id} {...trip} />
+            </Link>
           ))}
         </div>
         <span className="text-sm text-gray-500">
