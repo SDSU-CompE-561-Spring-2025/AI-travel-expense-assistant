@@ -45,7 +45,7 @@ export default function SupportPage() {
               <p className="text-sm text-white">
                 +1 (555) 123-4567
                 <br />
-                Monday-Friday: 8am-6pm PST
+                Sundays: 10pm-10:15pm PST
               </p>
             </CardContent>
           </Card>
@@ -61,7 +61,7 @@ export default function SupportPage() {
               <p className="text-sm text-white">
                 info@travelbuddy.com
                 <br />
-                We typically respond within 24 hours
+                We typically respond within 365 days
               </p>
             </CardContent>
           </Card>
