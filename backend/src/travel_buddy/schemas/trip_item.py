@@ -12,7 +12,8 @@ class ItemType(str, enum.Enum):
 
 class ItemCreate(BaseModel):
     title: constr(min_length=3, max_length=100, pattern=r"^[a-zA-Z0-9\s_]+$")
-    date: datetime
+    start_date: datetime
+    end_date: datetime
     item_type: ItemType
     description: Optional[constr(max_length=300)]
     cost: float = Field(..., ge=0)

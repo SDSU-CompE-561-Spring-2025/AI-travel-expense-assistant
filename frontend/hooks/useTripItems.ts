@@ -1,52 +1,93 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+// hooks/useTripItems.ts
+import { useState, useEffect, useCallback } from 'react';
+import {
+  TripItem,
+  NewTripItem,
+  fetchTripItems,
+  createTripItem,
+  updateTripItem,
+  deleteTripItem,
+} from '@/lib/api/tripItems';
 
- export interface Trip {
-  description: string;
-  end_date: string;
-  id: number;
-  start_date: string;
-  title: string;
-}
+export function useTripItems(tripId: number) {
+  const [items, setItems] = useState<TripItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
-export function useTripItems() {
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchTrips = async () => {
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      setLoading(true);
-      setError(null);
-      
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-      
-      const response = await fetch('http://localhost:8000/trip/trips', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch trips');
-      }
-
-      const data = await response.json();
-      setTrips(data);
+      const data = await fetchTripItems(tripId);
+      setItems(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err as Error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [tripId]);
 
   useEffect(() => {
-    fetchTrips();
-  }, []);
+    if (tripId != null) {
+      refetch();
+    }
+  }, [tripId, refetch]);
 
-  return { trips, loading, error, refetch: fetchTrips };
-} 
+  const add = useCallback(
+    async (data: NewTripItem): Promise<TripItem> => {
+      setLoading(true);
+      setError(null);
+      try {
+        const newItem = await createTripItem(tripId, data);
+        setItems((prev) => [...prev, newItem]);
+        return newItem;
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [tripId]
+  );
+
+  const update = useCallback(
+    async (
+      itemId: number,
+      data: Partial<NewTripItem>
+    ): Promise<TripItem> => {
+      setLoading(true);
+      setError(null);
+      try {
+        const updated = await updateTripItem(tripId, itemId, data);
+        setItems((prev) => prev.map((i) => (i.id === itemId ? updated : i)));
+        return updated;
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [tripId]
+  );
+
+  const remove = useCallback(
+    async (itemId: number): Promise<void> => {
+      setLoading(true);
+      setError(null);
+      try {
+        await deleteTripItem(tripId, itemId);
+        setItems((prev) => prev.filter((i) => i.id !== itemId));
+      } catch (err) {
+        setError(err as Error);
+        throw err;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [tripId]
+  );
+
+  return { items, loading, error, refetch, add, update, remove };
+}
