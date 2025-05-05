@@ -80,13 +80,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const fetchUser = async () => {
-    const token = localStorage.getItem('access_token');
-    if (!token) throw new Error('No token');
+  const fetchUser = async (token?: string | null  ) => {
+    if (!token || !isAuthenticated){
+      setUser(null);
+      return;
+    }
 
     const response = await fetch('http://localhost:8000/user/me', {
       headers: {
-        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        'Authorization': `Bearer ${token}`
       }
     });
 

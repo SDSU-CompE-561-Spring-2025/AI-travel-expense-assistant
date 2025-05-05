@@ -1,24 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
 import EditTrip from "@/components/EditTrip";
 import ManageTripItemModal from "@/components/manage-trip-item-modal";
 import { Trip } from "@/hooks/useTrips";
 import { TripItem } from "@/lib/api/tripItems";
 import { useTripItems } from "@/hooks/useTripItems";
+import { useParams } from "next/navigation";
 
 // Placeholder trip data—swap out for real fetch or route-based data as needed
-const dummyTrip: Trip = {
-  id: 1,
-  title: "Sample Trip",
-  description: "This is a placeholder trip for UI testing.",
-  start_date: "2025-06-01",
-  end_date: "2025-06-10",
-};
+// const dummyTrip: Trip = {
+//   id: 1,
+//   title: "Sample Trip",
+//   description: "This is a placeholder trip for UI testing.",
+//   start_date: "2025-06-01",
+//   end_date: "2025-06-10",
+// };
 
 export default function EditTripPage() {
-  const tripId = dummyTrip.id;
+  const params = useParams();
+  const tripId = Number(params.id);
+  const [token, setToken] = useState<string | null>("");
+  const [trip,setTrip] = useState<Trip>({
+    id: -1,
+    title: "",
+    description: "",
+    start_date: new Date().toString(),
+    end_date: new Date().toString()
+  });
+
   const { items, loading, error, refetch } = useTripItems(tripId);
   const [selectedItem, setSelectedItem] = useState<TripItem | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -40,13 +51,32 @@ export default function EditTripPage() {
     refetch();
   };
 
+  useEffect(() => {
+      setToken(localStorage.getItem('access_token'));
+      const createTrip = async () => {
+        try{
+          const response = await fetch(`http://localhost:8000/trips/${tripId}/edit`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          })
+          const oldTrip = await response.json();
+          setTrip(oldTrip);
+        }catch(err){
+          console.error("Failed to create trip", err);
+        }
+      }
+    },[]);
+
   return (
     <>
       <Navbar />
       <main className="p-8 space-y-6 max-w-4xl mx-auto">
         {/* Trip form */}
-        <h1 className="text-2xl font-bold">Edit Trip: {dummyTrip.title}</h1>
-        <EditTrip {...dummyTrip} />
+        <h1 className="text-2xl font-bold">Edit Trip: {trip.title}</h1>
+        <EditTrip />
 
         {/* Add Item Button */}
         <div className="flex justify-end">
