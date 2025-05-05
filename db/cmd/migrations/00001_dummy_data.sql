@@ -1,4 +1,11 @@
 -- +goose Up
+
+-- Update database to fit new trip_item model
+ALTER TABLE items DROP COLUMN date;
+
+ALTER TABLE items ADD COLUMN start_date TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'UTC');
+ALTER TABLE items ADD COLUMN end_date TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'UTC');
+
 -- +goose StatementBegin
 -- Insert a test user
 INSERT INTO users (id, username, email, password_hash, phone_number, created_at)
