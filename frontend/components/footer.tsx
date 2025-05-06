@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { MapPin, Mail, Phone, FacebookIcon, Instagram, Twitter, Youtube, Linkedin } from "lucide-react"
+import { MapPin, Mail, Phone } from "lucide-react"
 import Policies from "./terms-stuff"
 import Image from "next/image"
 
@@ -38,35 +38,8 @@ export default function Footer() {
                 <span>info@travelbuddy.com</span>
               </div>
             </div>
-            {/* // Socials were depricated
-            <div className="mt-6">
-              <h4 className="text-sm font-semibold mb-2">Follow Us</h4>
-              <div className="flex space-x-4">
-                <Link href="#" className="text-slate-300 hover:text-teal-400 transition-colors">
-                  <FacebookIcon className="h-5 w-5" />
-                  <span className="sr-only">Facebook</span>
-                </Link>
-                <Link href="#" className="text-slate-300 hover:text-teal-400 transition-colors">
-                  <Twitter className="h-5 w-5" />
-                  <span className="sr-only">Twitter</span>
-                </Link>
-                <Link href="#" className="text-slate-300 hover:text-teal-400 transition-colors">
-                  <Instagram className="h-5 w-5" />
-                  <span className="sr-only">Instagram</span>
-                </Link>
-                <Link href="#" className="text-slate-300 hover:text-teal-400 transition-colors">
-                  <Youtube className="h-5 w-5" />
-                  <span className="sr-only">YouTube</span>
-                </Link>
-                <Link href="#" className="text-slate-300 hover:text-teal-400 transition-colors">
-                  <Linkedin className="h-5 w-5" />
-                  <span className="sr-only">LinkedIn</span>
-                </Link>
-              </div>
-            </div>*/}
           </div>
 
-          {/* Column 2: Quick Links */}
           <div className="ml-30">
             <h3 className="text-lg font-bold mb-4">Explore</h3>
             <ul className="space-y-2 text-sm">
@@ -108,7 +81,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Support */}
           <div>
             <h3 className="text-lg font-bold mb-4">Support</h3>
             <ul className="space-y-2 text-sm">

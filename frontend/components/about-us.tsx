@@ -1,4 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card"
+import Image from "next/image"
 
 export default function AboutPage() {
     return (
@@ -18,166 +19,230 @@ export default function AboutPage() {
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">
               <Card className="bg-[#C6AFEE] border-[#A279EA] border-3">
-              <CardHeader className="pb-2">
+              <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
                   Sam James
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <a
-                  href="https://www.linkedin.com/in/samantha-james-cs/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  LinkedIn
-                </a>
-                <br />
-                <a
-                    href="https://github.com/SamJames13"
+              <CardContent className="space-y-2">
+                <div className="w-50 h-50 relative mx-auto">
+                  <Image
+                    src="/Sam.jpg" 
+                    alt="Sam Headshot"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <div className="justify-between flex justify-between w-full px-2">
+                  <a
+                    href="https://www.linkedin.com/in/samantha-james-cs/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-white transition-colors"
-                >
-                  GitHub
-                </a>
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                      href="https://github.com/SamJames13"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                  >
+                    GitHub
+                  </a>
+                </div>
               </CardContent>
               </Card>
 
               <Card className="bg-[#C6AFEE] border-[#A279EA] border-3">
-              <CardHeader className="pb-2">
+              <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
                   Erica Lee
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <a
-                  href="https://www.linkedin.com/in/ericalylee/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  LinkedIn
-                </a>
-                <br />
-                <a
-                    href="https://github.com/irmtou"
+              <CardContent className="space-y-2">
+                <div className="w-50 h-50 relative mx-auto">
+                  <Image
+                    src="/Erica.jpg" 
+                    alt="Erica Headshot"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <div className="flex justify-between w-full px-2">
+                  <a
+                    href="https://www.linkedin.com/in/ericalylee/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
-                >
-                  GitHub
-                </a>
+                    className="hover:text-white transition-colors text-left"
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                      href="https://github.com/irmtou"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors text-right"
+                  >
+                    GitHub
+                  </a>
+                </div>
+                
               </CardContent>
               </Card>
 
               <Card className="bg-[#C6AFEE] border-[#A279EA] border-3">
-              <CardHeader className="pb-2">
+              <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
                   Brianna Ly
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <a
-                  href="https://www.linkedin.com/in/briannaly/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  LinkedIn
-                </a>
-                <br />
-                <a
-                    href="https://github.com/BriannavLy"
+              <CardContent className="space-y-2">
+                <div className="w-50 h-50 relative mx-auto">
+                  <Image
+                    src="/Brianna.jpg" 
+                    alt="Brianna Headshot"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+
+              <div className="justify-between flex justify-between w-full px-2">
+                  <a
+                    href="https://www.linkedin.com/in/briannaly/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-white transition-colors"
-                >
-                  GitHub
-                </a>
+                  >
+                    LinkedIn
+                  </a>
+                  <br />
+                  <a
+                      href="https://github.com/BriannavLy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                  >
+                    GitHub
+                  </a>
+                </div>
               </CardContent>
               </Card>
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">
               <Card className="bg-[#C6AFEE] border-[#A279EA] border-3">
-              <CardHeader className="pb-2">
+              <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
                   Joshua Constine
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <a
-                  href="https://www.linkedin.com/in/joshua-constine/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  LinkedIn
-                </a>
-                <br />
-                <a
-                    href="https://github.com/joshconstine"
+              <CardContent className="flex flex-col items-center space-y-2">
+                <div className="w-50 h-50 relative">
+                  <Image
+                    src="/Josh.jpg" 
+                    alt="Josh Headshot"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+
+                <div className="justify-between flex justify-between w-full px-2">
+                  <a
+                    href="https://www.linkedin.com/in/joshua-constine/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-white transition-colors"
-                >
-                  GitHub
-                </a>
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                      href="https://github.com/joshconstine"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                  >
+                    GitHub
+                  </a>
+                </div>
               </CardContent>
               </Card>
 
               <Card className="bg-[#C6AFEE] border-[#A279EA] border-3">
-              <CardHeader className="pb-2">
+              <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
                   Theo Bongolan
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <a
-                  href="https://www.linkedin.com/in/theo-bongolan/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  LinkedIn
-                </a>
-                <br />
-                <a
-                    href="https://github.com/Theo-Bongolan"
+              <CardContent className="flex flex-col items-center space-y-2">
+                <div className="w-50 h-50 relative">
+                  <Image
+                    src="/Theo.jpg" 
+                    alt="Theo Headshot"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <div className="justify-between flex justify-between w-full px-2">
+                  <a
+                    href="https://www.linkedin.com/in/theo-bongolan/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-white transition-colors"
-                >
-                  GitHub
-                </a>
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                      href="https://github.com/Theo-Bongolan"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                  >
+                    GitHub
+                  </a>
+                </div>
               </CardContent>
               </Card>
 
               <Card className="bg-[#C6AFEE] border-[#A279EA] border-3">
-              <CardHeader className="pb-2">
+              <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
                   Sean Pitman
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <a
-                  href="https://www.linkedin.com/in/sean-pitman-495023298/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  LinkedIn
-                </a>
-                <br />
-                <a
-                    href="https://github.com/sjpitman22"
+              <CardContent className="flex flex-col items-center space-y-2">
+                <div className="w-50 h-50 relative">
+                  <Image
+                    src="/Sean.jpg" 
+                    alt="Sean Headshot"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <div className="justify-between flex justify-between w-full px-2">
+                  <a
+                    href="https://www.linkedin.com/in/sean-pitman-495023298/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-white transition-colors"
-                >
-                  GitHub
-                </a>
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                      href="https://github.com/sjpitman22"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors"
+                  >
+                    GitHub
+                  </a>
+                </div>
               </CardContent>
               </Card>
             </div>

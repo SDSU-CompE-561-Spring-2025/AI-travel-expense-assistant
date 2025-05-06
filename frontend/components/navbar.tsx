@@ -24,8 +24,9 @@ export default function Navbar() {
               priority
             /> 
             <h1 className="text-4xl font-bold text-[#A279EA]">Travel Buddy</h1>
+            <span className="text-lg text-[#A279EA]"> - your simple travel planning assistant is here to help!</span>
           </div>
-          <span className="text-lg text-[#A279EA]">Your simple travel assistant is here to help!</span>
+          
         </div>
         {isAuthenticated ? (
           <>

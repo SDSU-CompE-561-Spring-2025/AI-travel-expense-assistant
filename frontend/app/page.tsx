@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="flex flex-col gap-3 mt-12 justify-center items-center ">
+      <main className="flex flex-col gap-3 mt-12 justify-center items-center">
         <div className="flex  gap-4 w-full items-center justify-center">
           {trips.map((trip) => (
             <Link href={`/trips/${trip.id}`}>
@@ -28,7 +28,7 @@ export default function Home() {
             </Button>
           </Link>
       </main>
-      <div className="mb-14" />
+      <div className="mb-22" />
       <Footer />
     </>
   );
