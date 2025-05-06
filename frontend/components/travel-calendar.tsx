@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useUserTrips, Trip } from "@/hooks/useTrips" // For fetch, create, delete
 import { MonthCalendar } from "./ui/month-calendar"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -16,12 +17,30 @@ const travelEvents = [
   { id: 6, title: "Safari Adventure", date: new Date(2025, 6, 25), color: "bg-teal-500" },
 ]
 
+// Colors for event categories; going to go back adn do specific colors for each activity type 
+const eventColors = [
+  "bg-blue-500",
+  "bg-amber-500",
+  "bg-emerald-500",
+  "bg-purple-500",
+  "bg-rose-500",
+  "bg-teal-500",
+  "bg-pink-500",
+  "bg-indigo-500",
+];
+
+
+// TravelCalendar component
 export function TravelCalendar() {
   const today = new Date()
   const [startMonth, setStartMonth] = useState(new Date(today.getFullYear(), today.getMonth(), 1))
   const [focusedMonth, setFocusedMonth] = useState<number | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  
+  // Import hook values from useTrips
+  const { trips, loading, error } = useUserTrips();
 
+  
   // Navigate months backward
   const prevMonths = () => {
     setStartMonth(new Date(startMonth.getFullYear(), startMonth.getMonth() - 3, 1))
@@ -32,21 +51,27 @@ export function TravelCalendar() {
     setStartMonth(new Date(startMonth.getFullYear(), startMonth.getMonth() + 3, 1))
   }
 
-  // Get events for a specific date
-  const getEventsForDate = (date: Date) => {
-    return travelEvents.filter(
-      (event) =>
-        event.date.getDate() === date.getDate() &&
-        event.date.getMonth() === date.getMonth() &&
-        event.date.getFullYear() === date.getFullYear(),
-    )
-  }
-
   // Generate array of months to display
   const months = Array.from({ length: 6 }, (_, i) => {
     const monthDate = new Date(startMonth.getFullYear(), startMonth.getMonth() + i, 1)
     return monthDate
   })
+
+  // Get events for a specific date
+  const getEventsForDate = (date: Date) => {
+    return (trips ?? []).filter((trip: Trip) => {
+      const tripDate = new Date(trip.start_date)
+      return (
+        tripDate.getDate() === date.getDate() &&
+        tripDate.getMonth() === date.getMonth() &&
+        tripDate.getFullYear() === date.getFullYear()
+      )
+    }).map((trip, index) => ({
+      ...trip,
+      date: new Date(trip.start_date),
+      color: eventColors[trip.id % eventColors.length],
+    }))
+  }
 
   // Handle date selection
   const handleDateSelect = (date: Date) => {
@@ -80,6 +105,9 @@ export function TravelCalendar() {
         </div>
       </div>
 
+      {loading && <p className="text-gray-500">Loading trips...</p>}
+      {error && <p className="text-red-500">Failed to load trips: {error}</p>}
+
       {selectedDate && ( // Selected date
         <Card className="p-4 mt-6">
           <div className="flex items-center mb-4">
@@ -98,9 +126,9 @@ export function TravelCalendar() {
           {selectedDateEvents.length > 0 ? (
             <div className="space-y-3">
               <h4 className="font-medium text-slate-700">Travel Plans:</h4>
-              {selectedDateEvents.map((event) => (
+              {selectedDateEvents.map((event: Trip) => (
                 <div key={event.id} className="flex items-center p-3 rounded-md bg-slate-50">
-                  <div className={`w-3 h-3 rounded-full ${event.color} mr-3`}></div>
+                  <div className={`w-3 h-3 rounded-full ${eventColors[event.id % eventColors.length]} mr-3`} />
                   <div className="flex items-center">
                     <Plane className="h-4 w-4 text-slate-500 mr-2" />
                     <span>{event.title}</span>
@@ -129,7 +157,11 @@ export function TravelCalendar() {
           >
             <MonthCalendar
               month={month}
-              events={travelEvents}
+              events={(trips ?? []).map((trip, index) => ({
+                ...trip,
+                date: new Date(trip.start_date),
+                color: eventColors[trip.id % eventColors.length],
+              }))}
               onDateSelect={handleDateSelect}
               selectedDate={selectedDate}
               expanded={focusedMonth === index}
