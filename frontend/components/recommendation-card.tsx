@@ -1,5 +1,4 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Star } from "lucide-react"
 
 interface RecommendationCardProps {
   title: string

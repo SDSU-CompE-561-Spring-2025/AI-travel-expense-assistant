@@ -15,7 +15,6 @@ export default function RecommendationsPage() {
     const [destination, setDestination] = useState("")
     const [recommendations, setRecommendations] = useState<any[]>([])
     const [isLoading, setIsLoading] = useState(false)
-    //const [hasMounted, setHasMounted] = useState(false)
     const [messages, setMessages] = useState<any[]>([])
     const [destinationSnapshot, setDestinationSnapshot] = useState("")
    
@@ -110,7 +109,7 @@ export default function RecommendationsPage() {
             <div>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Travel Assistant</CardTitle>
+                        <CardTitle>Travel Buddy Assistant</CardTitle>
                         <CardDescription>Ask for recommendations for any destination (region, city, county, etc)</CardDescription>
                     </CardHeader>
                     <CardContent>

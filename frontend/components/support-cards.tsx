@@ -3,14 +3,13 @@ import Link from "next/link"
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 
 export default function SupportPage() {
   return (
     <main className="container mx-auto px-4 py-12">
       <div className="mx-auto max-w-5xl">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight mb-4">How Can We Help?</h1>
+          <h1 className="text-3xl font-bold tracking-tight mb-4">How Can We Help?</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             We're here to make your travel experience as smooth as possible. Find answers to common questions or reach
             out to our team.
@@ -83,10 +82,10 @@ export default function SupportPage() {
             <AccordionItem value="item-2">
               <AccordionTrigger>How do I plan a new trip?</AccordionTrigger>
               <AccordionContent>
-                After logging in, click on the "Create a new trip" button on your dashboard. Enter your destination,
+                After logging in, click on the "Create a new trip" button on your dashboard (the home page). Enter your destination,
                 travel dates, and a brief description. Then, when you hit submit, you will be taken to a page where you can 
                 add your trip's "items", which include accomodations, activities, and transportation. You can customize every
-                aspect of your trip and collaborate with our recommendations chat bot on the planning.
+                aspect of your trip and collaborate with our recommendations chat bot for ideas on where to go!
               </AccordionContent>
             </AccordionItem>
 
@@ -113,10 +112,10 @@ export default function SupportPage() {
               <AccordionTrigger>How can I incorporate the recommendations into my trips?</AccordionTrigger>
               <AccordionContent>
                 Once you Travel Buddy's wonderful AI recommendations, you can then navigate to one of our partners' websites, such as 
-                Kayak of Trip Advisor, to get more specifics on tours, tickets, and availability of these recommended places. You can find 
+                Kayak or Trip Advisor, to get more specifics on tours, tickets, and availability of these recommended places. You can find 
                 links to these at the bottom of any page or through a quick Google search. Then, navigate back here and input your selected 
-                item (tour, place, etc) through the "Add item" button that is at the top of the page after you click on you trip that you 
-                wish to add the activity to from the home page.
+                item (tour, place, etc) through the "Add item" button that is at the top of the page after you navigate to the trip that you 
+                wish to add the activity to. You can access your trips from the home page.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

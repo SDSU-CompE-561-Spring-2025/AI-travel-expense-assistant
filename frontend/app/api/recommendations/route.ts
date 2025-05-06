@@ -51,8 +51,6 @@ export async function POST(req: Request) {
         role: "assistant",
         content: result.text,
     })
-    
-   //return result.toDataStreamResponse()
 
     //return result.toDataStreamResponse()
     } catch (err) {
