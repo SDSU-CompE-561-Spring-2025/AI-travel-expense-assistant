@@ -5,7 +5,7 @@ export default function AboutPage() {
       <main className="container mx-auto px-4 py-12">
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold tracking-tight mb-4">Who are we?</h1>
+            <h1 className="text-3xl font-bold tracking-tight mb-4">Who are we?</h1>
             <p className="text-lg  max-w-2xl mx-auto">
               The engineers here are Travel Buddy want to help you make your travel experience as smooth as possible. Our goal 
               is to provide a secure, all-in-one travel itinerary planner platform where you can create, edit, and manage your 
@@ -13,7 +13,7 @@ export default function AboutPage() {
               (or at least manifestating this). Thank you for your interest in our application!
             </p> <br /><br />
 
-            <h1 className="text-4xl font-bold tracking-tight mb-4">Check out the engineers behind Travel Buddy:</h1>
+            <h1 className="text-3xl font-bold tracking-tight mb-4">Check out the engineers behind Travel Buddy:</h1>
             <br />
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">

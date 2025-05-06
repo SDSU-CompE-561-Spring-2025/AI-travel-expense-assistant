@@ -1,18 +1,26 @@
 import Link from "next/link"
 import { MapPin, Mail, Phone, FacebookIcon, Instagram, Twitter, Youtube, Linkedin } from "lucide-react"
 import Policies from "./terms-stuff"
+import Image from "next/image"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
     <footer className="bg-slate-900 text-white">
-      {/* Main Footer Content */}
       <div className="container mx-auto px-6 md:px-8 lg:px-12 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Column 1: About & Contact */}
           <div className="space-y-4">
-            <h3 className="text-xl font-bold mb-4">Travel Buddy</h3>
+            <div className="flex items-center space-x-4">
+              <Image
+                src="/logoicon.png" 
+                alt="Travel Buddy Footer Logo Icon"
+                height={30}
+                width={30}
+                priority
+              />
+              <h3 className="text-xl font-bold">Travel Buddy</h3>
+            </div>
             <p className="text-slate-300 text-sm">
               Your ultimate companion for planning and organizing memorable travel experiences around the world.
             </p>
