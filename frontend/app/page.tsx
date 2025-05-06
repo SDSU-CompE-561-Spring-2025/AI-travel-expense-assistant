@@ -4,6 +4,7 @@ import TripCard from "@/components/tripCard";
 import { Button } from "@/components/ui/button";
 import { useUserTrips } from "@/hooks/useTrips";
 import Link from "next/link";
+import Footer from "@/components/footer";
 export default function Home() {
  const {trips, loading, error, refetch} = useUserTrips();
     console.log(trips);
@@ -27,8 +28,8 @@ export default function Home() {
             </Button>
           </Link>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-      </footer>
+      <div className="mb-14" />
+      <Footer />
     </>
   );
 }
