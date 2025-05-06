@@ -17,7 +17,7 @@ class ItemCreate(BaseModel):
     item_type: ItemType
     description: Optional[constr(max_length=300)]
     cost: float = Field(..., ge=0)
-    web_link: Optional[HttpUrl] 
+    web_link: Optional[HttpUrl] = None
 
 class ItemResponse(ItemCreate):
     id: int

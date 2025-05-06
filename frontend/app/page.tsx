@@ -10,7 +10,7 @@ import Footer from "@/components/footer";
 export default function Home() {
   const [token,setToken] = useState<string | null>("");
   const {trips, loading, error, refetch} = useUserTrips(/*token*/);
-
+  
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent immediate navigation
     alert('Please login to create a trip');
@@ -21,7 +21,6 @@ export default function Home() {
   },[]);
 
   console.log(trips);
-
   return (
     <>
       <Navbar />
@@ -34,11 +33,11 @@ export default function Home() {
         <span className="text-sm text-gray-500">
           Ready for a new adventure?
         </span>
-            {token ? (<Link href="/new-trip">
+          {token ? (<Link href="/new-trip">
               <Button size="lg">
                 + Create a new trip
             </Button>
-            </Link>) : (<Link onClick={handleClick} href="">
+          </Link>) : (<Link onClick={handleClick} href="">
               <Button size="lg">
                 + Create a new trip
             </Button>

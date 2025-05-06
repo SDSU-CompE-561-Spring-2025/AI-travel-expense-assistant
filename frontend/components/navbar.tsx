@@ -18,7 +18,6 @@ export default function Navbar() {
     fetchUser();
   }, [user]);
 
-
   return (
     <nav className="w-full">
       <div className="flex w-full px-8 py-4 justify-between items-center">
@@ -48,12 +47,12 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <span>
-              Welcome!
-            </span>
-            <Link href="/login">
-              <Button className="text-white bg-slate-900">Sign In</Button>
-            </Link>
+          <span>
+            Welcome!
+          </span>
+          <Link href="/login">
+            <Button className="text-white bg-slate-900">Sign In</Button>
+          </Link>
           </>
         )}
       </div>

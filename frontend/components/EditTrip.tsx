@@ -14,6 +14,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import {Calendar} from "@/components/ui/calendar"
 import {Calendar as CalendarIcon} from "lucide-react"
 import {Trip} from "@/hooks/useTrips"
+import { useParams } from "next/navigation"
 
 //This form was made from shadecn's form builder
 const formSchema = z.object({
@@ -35,7 +36,7 @@ export default function MyForm() {
     start_date: new Date().toString(),
     end_date: new Date().toString()
   });
-
+  
   const form = useForm < z.infer < typeof formSchema >> ({
     resolver: zodResolver(formSchema),
     defaultValues: {

@@ -5,11 +5,10 @@ import EditTrip from "@/components/EditTrip";
 import ManageTripItemModal from "@/components/manage-trip-item-modal"
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { useParams } from "next/navigation";
-import { TripItem } from "@/lib/api/tripItems";
-import { useTripItems } from "@/hooks/useTripItems";
 import { useEffect } from "react";
 import { Trip } from "@/hooks/useTrips";
+import { TripItem } from "@/lib/api/tripItems";
+import { useTripItems } from "@/hooks/useTripItems";
 
 export default function NewTrip() {
   const [token, setToken] = useState<string | null>("");
@@ -47,7 +46,7 @@ export default function NewTrip() {
     createTrip();
   },[])
 
-  const { items, loading, error, refetch } = useTripItems(newTrip.id);
+  const { items, isLoading, error } = useTripItems(newTrip.id);
   const [selectedItem, setSelectedItem] = useState<TripItem | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
@@ -67,6 +66,8 @@ export default function NewTrip() {
     setIsCreating(false);
     refetch();
   };
+
+
 
   return (
       <>

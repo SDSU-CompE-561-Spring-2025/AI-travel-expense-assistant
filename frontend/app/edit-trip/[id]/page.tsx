@@ -71,6 +71,25 @@ export default function EditTripPage() {
 
 
 
+  useEffect(() => {
+      setToken(localStorage.getItem('access_token'));
+      const createTrip = async () => {
+        try{
+          const response = await fetch(`http://localhost:8000/trips/${tripId}/edit`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          })
+          const oldTrip = await response.json();
+          setTrip(oldTrip);
+        }catch(err){
+          console.error("Failed to create trip", err);
+        }
+      }
+    },[]);
+
   return (
     <>
       <Navbar />
