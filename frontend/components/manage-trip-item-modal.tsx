@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker"
 import { CalendarIcon, ArrowRightIcon, ChevronDown  } from "lucide-react"
-import { TripItem } from "@/lib/api/tripItems";
+import { TripItem, NewTripItem } from "@/lib/api/tripItems";
 import { useTripItems } from "@/hooks/useTripItems";
 
 type ManageTripItemModalProps = {
@@ -15,10 +15,10 @@ type ManageTripItemModalProps = {
 
 export default function ManageTripItemModal({ tripID, item, onClose }: ManageTripItemModalProps) {
     const [itemTitle, setItemTitle] = useState<string>(item?.title ?? "");
-    const [startDate, setStartDate] = useState<Date | null>(item?.start_date ? new Date(item.start_date) : null);
-    const [endDate, setEndDate] = useState<Date | null>(item?.end_date ? new Date(item.end_date) : null);
-    const [activityType, setActivityType] = useState<string>(item?.item_type ?? "");
-    const [activityCost, setActivityCost] = useState<string>(item?.cost != null ? item.cost.toString() : "");
+    const [startDate, setStartDate] = useState<Date | null>(item ? new Date(item.start_date) : null);
+    const [endDate, setEndDate] = useState<Date | null>(item ? new Date(item.end_date) : null);
+    const [activityType, setActivityType] = useState<TripItem["item_type"]>(item?.item_type ?? "activity");
+    const [activityCost, setActivityCost] = useState<string>(item?.cost != null ? item.cost.toString() : "0");    
     const [activityDescription, setActivityDescription] = useState<string>(item?.description ?? "");
     const [activityExternalLink, setActivityExternalLink] = useState<string>(item?.web_link ?? "");
 
@@ -28,19 +28,24 @@ export default function ManageTripItemModal({ tripID, item, onClose }: ManageTri
         e.preventDefault();
         console.log("Trip item created: ", {itemTitle});
 
-        const payload = {
+        if (!startDate || !endDate) {
+            console.error("Start and end dates are required");
+            return;
+        }
+
+        const payload: NewTripItem = {
             title: itemTitle,
-            start_date: startDate ? startDate.toISOString() : "",
-            end_date: endDate ? endDate.toISOString() : "", 
-            item_type: activityType as TripItem['item_type'],
-            cost: activityCost ? parseFloat(activityCost) : undefined,
+            start_date: startDate.toISOString(),
+            end_date: endDate.toISOString(), 
+            item_type: activityType,
+            cost: parseFloat(activityCost),
             description: activityDescription || undefined,
             web_link: activityExternalLink || undefined,
           };
 
           try {
             if (item && item.id) {
-              await update(item.id, payload);
+                await update({ id: item.id, item: payload });
             } else {
               await add(payload);
             }
@@ -78,8 +83,8 @@ export default function ManageTripItemModal({ tripID, item, onClose }: ManageTri
                     <div className="flex items-center bg-gray-100 border-0 border-b border-gray-300 p-2 placeholder-gray-400 focus:outline-none focus:border-gray-500 ">
                         <DatePicker 
                             selected={startDate}
-                            onChange={(d) => setStartDate(d)}
-                            dateFormat="MMM d, YYY"
+                            onChange={(date: Date | null) => setStartDate(date)}
+                            dateFormat="MMM d, yyyy"
                             placeholderText="Start Date"
                             required 
                             className="w-32 bg-transparent focus:outline-none"
@@ -96,7 +101,7 @@ export default function ManageTripItemModal({ tripID, item, onClose }: ManageTri
                         <DatePicker 
                             selected={endDate}
                             onChange={(d) => setEndDate(d)}
-                            dateFormat="MMM d, YYY"
+                            dateFormat="MMM d, yyyy"
                             placeholderText="End Date"
                             required 
                             className="w-32 bg-transparent focus:outline-none"
@@ -115,7 +120,7 @@ export default function ManageTripItemModal({ tripID, item, onClose }: ManageTri
                         <select
                             id="activityType"
                             value={activityType}
-                            onChange={(e) => setActivityType(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setActivityType(e.target.value as TripItem["item_type"])}
                             required
                             className="
                                 block w-full

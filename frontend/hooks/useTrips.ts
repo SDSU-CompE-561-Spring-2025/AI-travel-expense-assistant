@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
   title: string;
 }
 
-export function useUserTrips() {
+export function useUserTrips(/*token?: string*/) {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,5 +48,5 @@ export function useUserTrips() {
     fetchTrips();
   }, []);
 
-  return { trips, loading, error, refetch: fetchTrips };
+  return /*token ?*/ { trips, loading, error, refetch: fetchTrips }/* : {trips:[], loading: false, error: null, refetch : () => {}}*/;
 } 

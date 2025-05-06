@@ -11,7 +11,7 @@ class ItemType(str, enum.Enum):
     other = "other"
 
 class ItemCreate(BaseModel):
-    title: constr(min_length=3, max_length=100, pattern=r"^[a-zA-Z0-9\s_]+$")
+    title: constr(min_length=3, max_length=100)
     start_date: datetime
     end_date: datetime
     item_type: ItemType

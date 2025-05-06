@@ -12,7 +12,7 @@ from travel_buddy.schemas.trip_item import ItemCreate, ItemResponse
 router = APIRouter()
 
 # Create a new item 
-@router.post("/{trip_id}/new", response_model=ItemResponse)
+@router.post("/{trip_id}/items", response_model=ItemResponse)
 def create_item(
     trip_id: int,  
     item: ItemCreate,
