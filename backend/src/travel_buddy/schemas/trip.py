@@ -9,7 +9,6 @@ class TripCreate(BaseModel):
     start_date: date
     end_date: date
     description: Optional[str] = Field(None, pattern=r'^[a-zA-Z0-9_\s\-.,!?]+$')
-    user_id: int = Field(..., gt=0)
 
 
 class TripResponse(BaseModel):

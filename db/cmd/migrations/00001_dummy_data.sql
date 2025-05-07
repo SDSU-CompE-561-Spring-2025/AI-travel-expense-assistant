@@ -44,6 +44,14 @@ pg_get_serial_sequence('items','id'),
   false
 )
 FROM items;
+
+-- Reset the trips.id sequence so next insert won’t collide
+SELECT setval(
+pg_get_serial_sequence('trips','id'),
+  COALESCE(MAX(id),0) + 1,
+  false
+)
+FROM trips;
 -- +goose StatementEnd
 
 -- +goose Down
