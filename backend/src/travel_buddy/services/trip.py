@@ -25,7 +25,9 @@ def create_trip(db: Session, trip: TripCreate, user: User):
     return db_trip
 
 def update_trip(db: Session, trip_id: int, user: User, newTrip: Trip):
-    trip = get_trip_by_id(db, trip_id)
+    trip = get_trip_by_id(db, trip_id, user)
+    if not trip:
+        raise HTTPException(status_code=404, detail="Trip not found")
     trip.user_id = user.id,
     trip.title = newTrip.title,
     trip.start_date = newTrip.start_date,
@@ -34,6 +36,7 @@ def update_trip(db: Session, trip_id: int, user: User, newTrip: Trip):
 
     db.commit()
     db.refresh(trip)
+    return trip
 
 def get_trips(db: Session, user: User):
     return db.query(Trip).filter(Trip.user_id == user.id).all()
