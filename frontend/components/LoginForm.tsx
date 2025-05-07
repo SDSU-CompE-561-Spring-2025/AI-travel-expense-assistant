@@ -74,7 +74,7 @@ export function LoginForm() {
         </div>
       )}
 
-      {/////* Username *////}
+      {/* Username */}
       <div className="space-y-2">
         <Label htmlFor="username">Username</Label>
         <Input
@@ -87,7 +87,7 @@ export function LoginForm() {
         )}
       </div>
 
-      {/////* Password */////}
+      {/* Password */}
       <div className="space-y-2">
         <Label htmlFor="password">Password</Label>
         <Input
@@ -101,7 +101,7 @@ export function LoginForm() {
         )}
       </div>
 
-      {//////* Remember Me, Forgot Password */////}
+      {/* Remember Me & Forgot Password */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Checkbox id="remember" {...register("remember")} />
@@ -115,7 +115,7 @@ export function LoginForm() {
         </Link>
       </div>
 
-      {//////* Submit */////}
+      {/* Submit */}
       <Button
         type="submit"
         className="w-full bg-branded-900 hover:bg-branded-800 text-white"
@@ -124,7 +124,7 @@ export function LoginForm() {
         {loading ? "Logging in..." : "Log in"}
       </Button>
 
-      {//////* Signup Link */////}
+      {/* Signup Link */}
       <div className="text-center text-sm text-branded-600">
         <Link href="/signup" className="hover:underline">
           No account yet? Sign up here
