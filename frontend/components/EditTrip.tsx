@@ -1,5 +1,6 @@
 "use client"
-import {useState} from "react"
+
+import {useEffect, useState} from "react"
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import * as z from "zod"
@@ -13,6 +14,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"
 import {Calendar} from "@/components/ui/calendar"
 import {Calendar as CalendarIcon} from "lucide-react"
 import {Trip} from "@/hooks/useTrips"
+import { useParams } from "next/navigation"
 
 //This form was made from shadecn's form builder
 const formSchema = z.object({
@@ -23,7 +25,18 @@ const formSchema = z.object({
   end_date: z.coerce.date()
 });
 
-export default function MyForm(trip: Trip) {
+export default function MyForm() {
+  const params = useParams();
+  const tripId = Number(params.id);
+  const [token, setToken] = useState<string | null>("");
+  const [trip,setTrip] = useState<Trip>({
+    id: -1,
+    title: "",
+    description: "",
+    start_date: new Date().toString(),
+    end_date: new Date().toString()
+  });
+  
   const form = useForm < z.infer < typeof formSchema >> ({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,16 +48,32 @@ export default function MyForm(trip: Trip) {
     },
   })
 
+  useEffect(() => {
+    setToken(localStorage.getItem('access_token'));
+    const createTrip = async () => {
+      try{
+        const response = await fetch(`http://localhost:8000/trips/${tripId}/edit`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+        const oldTrip = await response.json();
+        setTrip(oldTrip);
+      }catch(err){
+        console.error("Failed to create trip", err);
+      }
+    }
+  },[]);
+
   async function onSubmit(values: z.infer < typeof formSchema > ) {
     try{
         const response = await fetch(`http://localhost:8000/trips/${trip.id}`, {
-          method: "PUT",
+          method: "PATCH",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(values)
         });
-        if(!response.ok){
-            throw new Error("Failed to update trip");
-        }
         const data = await response.json();
       }catch(error){
         console.error("Error while updating trip:", error);
