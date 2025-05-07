@@ -15,6 +15,7 @@ export default function Navbar() {
   }
 
   useEffect(() => {
+    if (isAuthenticated)
     fetchUser();
   }, []);
 

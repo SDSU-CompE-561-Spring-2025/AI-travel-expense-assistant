@@ -22,13 +22,14 @@ import { useParams } from "next/navigation";
 export default function EditTripPage() {
   const params = useParams();
   const tripId = Number(params.id);
-  const [token, setToken] = useState<string | null>("");
+
+  const [token, setToken] = useState<string | null>(null);
   const [trip,setTrip] = useState<Trip>({
-    id: -1,
+    id: tripId,
     title: "",
     description: "",
-    start_date: new Date().toString(),
-    end_date: new Date().toString()
+    start_date: new Date(),
+    end_date: new Date()
   });
 
   const { items, isLoading, error } = useTripItems(tripId);
@@ -90,53 +91,33 @@ export default function EditTripPage() {
     setIsCreating(false);
     };
 
-  useEffect(() => {
-    setToken(localStorage.getItem('access_token'));
-    const createTrip = async () => {
-      try{
-        const response = await fetch(`http://localhost:8000/trips/${tripId}/edit`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-        const oldTrip = await response.json();
-        setTrip(oldTrip);
-      }catch(err){
-        console.error("Failed to create trip", err);
-      }
-    }
-  },[]);
-
-
-
-  useEffect(() => {
-      setToken(localStorage.getItem('access_token'));
-      const createTrip = async () => {
-        try{
-          const response = await fetch(`http://localhost:8000/trips/${tripId}/edit`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          })
-          const oldTrip = await response.json();
-          setTrip(oldTrip);
-        }catch(err){
-          console.error("Failed to create trip", err);
-        }
-      }
-    },[]);
+    // useEffect(() => {
+  //     setToken(localStorage.getItem('access_token'));
+  //     const fetchTrip = async () => {
+  //       try{
+  //         const response = await fetch(`http://localhost:8000/trips/${trip.id}`, {
+  //           method: 'GET',
+  //           headers: {
+  //             'Authorization': `Bearer ${token}`,
+  //             'Content-Type': 'application/json'
+  //           }
+  //         })
+  //         const oldTrip = await response.json();
+  //         setTrip(oldTrip);
+  //       }catch(err){
+  //         console.error("Failed to create trip", err);
+  //       }
+  //     }
+  //     fetchTrip();
+  //   },[]);
 
   return (
     <>
       <Navbar />
       <main className="p-8 space-y-6 max-w-4xl mx-auto">
         {/* Trip form */}
-        <h1 className="text-2xl font-bold">Edit Trip: {trip.title}</h1>
-        <EditTrip />
+        <h1 className="text-2xl font-bold">Edit Trip:</h1>
+        <EditTrip mode='edit'/>
 
         {/* Add Item Button */}
         <div className="flex justify-end">

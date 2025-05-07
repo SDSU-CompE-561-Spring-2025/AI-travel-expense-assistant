@@ -3,13 +3,13 @@ import { useState, useEffect } from 'react';
 
  export interface Trip {
   description: string;
-  end_date: string;
+  end_date: Date;
   id: number;
-  start_date: string;
+  start_date: Date;
   title: string;
 }
 
-export function useUserTrips(/*token?: string*/) {
+export function useUserTrips() {
   const [trips, setTrips] = useState<Trip[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
