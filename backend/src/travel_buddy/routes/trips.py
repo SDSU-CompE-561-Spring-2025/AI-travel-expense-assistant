@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from travel_buddy.schemas.trip import TripCreate, TripResponse
+from travel_buddy.schemas.trip import TripCreate, TripResponse, TripUpdate
 from travel_buddy.dependencies import get_db
 from fastapi import Depends
 from sqlalchemy import DateTime, Date
@@ -8,7 +8,7 @@ from travel_buddy.models.trip import Trip
 from travel_buddy.core.authentication import oauth2_scheme, decode_access_token
 import travel_buddy.services.trip as trip_service
 import travel_buddy.services.user as user_service
-from datetime import datetime
+from datetime import date
 
 router = APIRouter()
 
@@ -36,34 +36,27 @@ def get_trips(
 @router.get("/trips/{id}", response_model=TripResponse)
 def get_trip_by_id(
     db: Session = Depends(get_db),
-    id: int=-1
+    id: int = None,
+    token: str = Depends(oauth2_scheme)
 ):
-    return trip_service.get_trip_by_id(db,id)
+    username = decode_access_token(token).username
+    user = user_service.get_user_by_username(db, username)
+    return trip_service.get_trip_by_id(db,id, user)
 
 @router.patch("/trips/edit-trip/{id}", response_model=TripResponse)
 def update_trip(
+    trip: TripUpdate,
     db: Session = Depends(get_db),
-    id: int=-1,
-    token: str = Depends(oauth2_scheme),
-    newTitle: str = "",
-    newDescription: str = "",
-    newStartDate: str = "",
-    newEndDate: str = ""
+    id: int = None,
+    token: str = Depends(oauth2_scheme)
 ):
-    newTrip = Trip()
-    newTrip.id = id
-    newTrip.title = newTitle
-    newTrip.description = newDescription
-    newTrip.start_date = Date(newStartDate)
-    newTrip.end_date = Date(newEndDate)
-
-    username = decode_access_token(token)
+    username = decode_access_token(token).username
     user = user_service.get_user_by_username(db,username)
-    return trip_service.update_trip(db,id,user,newTrip)
+    return trip_service.update_trip(db,id,user,trip)
 
 @router.delete("/trips/{id}",response_model=TripResponse)
 def delete_trip(
     db: Session = Depends(get_db),
-    id: int=-1
+    id: int = None
 ):
     return trip_service.delete_trip(db,id)

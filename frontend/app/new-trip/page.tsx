@@ -16,35 +16,10 @@ export default function NewTrip() {
     id: -1,
     title: "",
     description: "",
-    start_date: new Date().toString(),
-    end_date: new Date().toString()
+    start_date: new Date(),
+    end_date: new Date()
   });
 
-  useEffect(() => {
-    setToken(localStorage.getItem('access_token'));
-    const createTrip = async () => {
-      try{
-        const response = await fetch('http://localhost:8000/trips', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            title: newTrip.title,
-            description: newTrip.description,
-            start_date: newTrip.start_date,
-            end_date: newTrip.end_date
-          })
-        });
-        const blankTrip = await response.json();
-        setNewTrip(blankTrip);
-      }catch(err){
-        console.error("Failed to create trip", err);
-      }
-    }
-    createTrip();
-  },[])
 
   const { items, isLoading, error } = useTripItems(newTrip.id);
   const [selectedItem, setSelectedItem] = useState<TripItem | null>(null);
@@ -73,8 +48,8 @@ export default function NewTrip() {
       <Navbar />
             <main className="p-8 space-y-6 max-w-4xl mx-auto">
               {/* Trip form */}
-              <h1 className="text-2xl font-bold">New Trip: {newTrip.title}</h1>
-              <EditTrip/>
+              <h1 className="text-2xl font-bold">New Trip:</h1>
+              <EditTrip mode='create'/>
             </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
       </footer>

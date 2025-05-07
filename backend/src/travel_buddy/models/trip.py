@@ -1,5 +1,5 @@
 
-from datetime import UTC, datetime
+from datetime import UTC, date
 
 from sqlalchemy import Column, DateTime, Enum, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship

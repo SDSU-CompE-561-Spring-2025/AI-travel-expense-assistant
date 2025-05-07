@@ -38,8 +38,8 @@ def update_trip(db: Session, trip_id: int, user: User, newTrip: Trip):
 def get_trips(db: Session, user: User):
     return db.query(Trip).filter(Trip.user_id == user.id).all()
 
-def get_trip_by_id(db: Session, id: int):
-    trip = db.query(Trip).filter(Trip.id == id).first()
+def get_trip_by_id(db: Session, id: int, user: User):
+    trip = db.query(Trip).filter(Trip.user_id == user.id).filter(Trip.id == id).first()
     if not trip:
         raise HTTPException(status_code=404, detail="Trip not found")
     return trip
