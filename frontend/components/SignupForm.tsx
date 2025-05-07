@@ -1,68 +1,122 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
+import PasswordRequirements from "@/components/PasswordRequirements";
 
 export function SignupForm() {
+  const { login } = useAuth();
+
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    username: "",
     email: "",
     password: "",
-    isCool: false,
+    confirmPassword: "",
+    agreeToTerms: false,
   });
+
+  const [usernameWarning, setUsernameWarning] = useState(false);
+  const [passwordValue, setPasswordValue] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "username") {
+      const hasSpecialChars = /[^a-zA-Z0-9_]/.test(value);
+      setUsernameWarning(hasSpecialChars);
+      if (hasSpecialChars) return;
+    }
+
+    if (name === "password") {
+      setPasswordValue(value);
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleCheckboxChange = (checked: boolean) => {
-    setFormData((prev) => ({ ...prev, isCool: checked }));
+    setFormData((prev) => ({
+      ...prev,
+      agreeToTerms: checked,
+    }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Signup form submitted:", formData);
-    // TODO: Connect to backend signup endpoint
+    setError(null);
+
+    if (!formData.agreeToTerms) {
+      setError("You must agree to the terms and privacy policy.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8000/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to sign up. Please check your details.");
+      }
+
+      // Immediately log in after signup
+      await login(formData.username, formData.password);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Signup failed");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6"
+    >
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold">Sign Up!</h1>
         <p className="text-gray-600 text-sm">Begin your trip planning today!</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input
-            id="firstName"
-            name="firstName"
-            placeholder="John"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
+      {error && (
+        <div className="bg-red-50 text-red-500 p-3 rounded-md text-sm">
+          {error}
         </div>
+      )}
 
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input
-            id="lastName"
-            name="lastName"
-            placeholder="Doe"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="username">Username</Label>
+        <Input
+          id="username"
+          name="username"
+          placeholder="yourusername"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+        {usernameWarning && (
+          <p className="text-sm text-red-500">No special characters allowed</p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -89,20 +143,42 @@ export function SignupForm() {
           onChange={handleChange}
           required
         />
+        {passwordValue && <PasswordRequirements passwordValue={passwordValue} />}
       </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="confirmPassword">Confirm Password</Label>
+        <Input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          placeholder="********"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+          />
+          {formData.confirmPassword &&
+          formData.confirmPassword !== formData.password && (
+          <p className="text-sm text-red-500">Passwords do not match</p>
+          )}
+          </div>
 
       <div className="flex items-center space-x-2">
-        <Checkbox id="isCool" checked={formData.isCool} onCheckedChange={handleCheckboxChange} />
-        <label
-          htmlFor="isCool"
-          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          Check this box if you're cool
-        </label>
+        <Checkbox
+          id="agreeToTerms"
+          checked={formData.agreeToTerms}
+          onCheckedChange={(checked) => handleCheckboxChange(!!checked)}
+        />
+        <Label htmlFor="agreeToTerms" className="text-sm">
+          I agree to the terms and privacy policy
+        </Label>
       </div>
 
-      <Button type="submit" className="w-full bg-branded-900 hover:bg-branded-800 text-white">
-        Sign Up
+      <Button
+        type="submit"
+        className="w-full bg-branded-900 hover:bg-branded-800 text-white"
+      >
+        Create Account
       </Button>
 
       <div className="text-center text-sm text-branded-600">
