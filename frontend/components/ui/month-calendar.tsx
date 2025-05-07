@@ -6,10 +6,11 @@ import { ChevronDown, ChevronUp, CalendarIcon } from "lucide-react"
 
 
 interface Event {
-  id: number
-  title: string
-  date: Date
-  color: string
+  id: number;            
+  title: string;
+  start: Date;
+  end: Date;
+  color: string;
 }
 
 interface MonthCalendarProps {
@@ -46,24 +47,30 @@ export function MonthCalendar({
   // TODO: Check if a date has events
   const hasEvents = (day: number) => {
     const date = new Date(currentYear, currentMonth, day)
-    return events.some(
-      (event) =>
-        event.date.getDate() === date.getDate() &&
-        event.date.getMonth() === date.getMonth() &&
-        event.date.getFullYear() === date.getFullYear(),
-    )
+    return events.some((event) => {
+      const start = new Date(event.start);
+      const end = new Date(event.end);
+      return date >= start && date <= end;
+    })
   }
+    
 
   // TODO: Get events for a specific day
   const getEventsForDay = (day: number) => {
     const date = new Date(currentYear, currentMonth, day)
-    return events.filter(
-      (event) =>
-        event.date.getDate() === date.getDate() &&
-        event.date.getMonth() === date.getMonth() &&
-        event.date.getFullYear() === date.getFullYear(),
-    )
-  }
+    return events
+      .filter((event) => {
+        const start = new Date(event.start);
+        const end = new Date(event.end);
+        return date >= start && date <= end;
+        })
+      .map((event) => {
+        const isStart = date.toDateString() === new Date(event.start).toDateString();
+        const isEnd = date.toDateString() === new Date(event.end).toDateString();
+        return {...event, isStart, isEnd};
+      });
+
+    }
 
   // Check if a date is today
   const isToday = (day: number) => {
@@ -95,28 +102,30 @@ export function MonthCalendar({
       const dayEvents = getEventsForDay(day)
       days.push(
         <button
-          key={day}
-          onClick={() => onDateSelect(new Date(currentYear, currentMonth, day))}
-          className={cn(
-            "relative h-8 md:h-10 w-8 md:w-10 rounded-full flex items-center justify-center text-sm hover:bg-slate-100 transition-colors",
-            isToday(day) && "font-bold text-blue-600",
-            isSelected(day) && "bg-blue-100 hover:bg-blue-200",
-            expanded ? "h-12 w-12" : "",
-          )}
-        >
-          {day}
-          {hasEvents(day) && (
-            <div className="absolute bottom-0.5 flex justify-center space-x-0.5">
-              {expanded ? (
-                dayEvents
-                  .slice(0, 3)
-                  .map((event, i) => <div key={i} className={`w-1.5 h-1.5 rounded-full ${event.color}`}></div>)
-              ) : (
-                <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-              )}
-            </div>
-          )}
-        </button>,
+  key={day}
+  onClick={() => onDateSelect(new Date(currentYear, currentMonth, day))}
+  className={cn(
+    "relative h-12 w-12 md:h-14 md:w-14 flex items-center justify-center text-sm hover:bg-slate-100 transition-colors rounded-md",
+    isToday(day) && "font-bold text-blue-600",
+    isSelected(day) && "bg-blue-100 hover:bg-blue-200",
+    expanded ? "h-12 w-12" : ""
+  )}
+>
+  {day}
+  {dayEvents.map((event, i) => (
+    <div
+    key={i}
+    className={cn(
+      "absolute top-1 left-0 right-0 h-2 z-10",
+      event.color,
+      event.isStart && "rounded-l-full pl-1",
+      event.isEnd && "rounded-r-full pr-1",
+      !event.isStart && !event.isEnd && "px-1"
+    )}
+  />
+  
+  ))}
+</button>,
       )
     }
 
@@ -151,35 +160,54 @@ export function MonthCalendar({
       </div>
 
       {expanded && (
-        <div className="mt-4 pt-3 border-t border-slate-200">
-          <h4 className="text-sm font-medium text-slate-700 mb-2">Events this month:</h4>
-          <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
-            {events
-              .filter(
-                (event) =>
-                  event.date.getMonth() === month.getMonth() && event.date.getFullYear() === month.getFullYear(),
-              )
-              .map((event) => (
-                <div
-                  key={event.id}
-                  className="flex items-center p-2 text-sm rounded bg-slate-50 hover:bg-slate-100 cursor-pointer"
-                  onClick={() => onDateSelect(event.date)}
-                >
-                  <div className={`w-2 h-2 rounded-full ${event.color} mr-2`}></div>
-                  <div>
-                    <span className="font-medium">{event.title}</span>
-                    <span className="text-slate-500 ml-2">{event.date.getDate()}</span>
-                  </div>
-                </div>
-              ))}
-            {events.filter((event) => event.date.getMonth() === month.getMonth()).length === 0 && (
-              <p className="text-sm text-slate-500 italic">No events scheduled</p>
-            )}
+  <div className="mt-4 pt-3 border-t border-slate-200">
+    <h4 className="text-sm font-medium text-slate-700 mb-2">Trips this month:</h4>
+    <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
+      {events
+        .filter(
+          (event) =>
+            event.start.getFullYear() <= month.getFullYear() &&
+            event.end.getFullYear() >= month.getFullYear() &&
+            event.start.getMonth() <= month.getMonth() &&
+            event.end.getMonth() >= month.getMonth()
+        )
+        .map((event) => (
+          <div
+            key={event.id}
+            className="flex items-center p-2 text-sm rounded bg-slate-50 hover:bg-slate-100 cursor-pointer"
+            onClick={() => onDateSelect(event.start)}
+          >
+            <div className={`w-2 h-2 rounded-full ${event.color} mr-2`} />
+            <div>
+              <span className="font-medium">{event.title}</span>
+              <span className="text-slate-500 ml-2">
+                {event.start.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}{" "}
+                -{" "}
+                {event.end.toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
           </div>
-        </div>
+        ))}
+      {events.filter(
+        (event) =>
+          event.start.getFullYear() <= month.getFullYear() &&
+          event.end.getFullYear() >= month.getFullYear() &&
+          event.start.getMonth() <= month.getMonth() &&
+          event.end.getMonth() >= month.getMonth()
+      ).length === 0 && (
+        <p className="text-sm text-slate-500 italic">No trips this month</p>
       )}
+    </div>
+  </div>
+)}
+
     </div>
   )
 }
 export {TravelCalendar} from "../travel-calendar"
-

@@ -16,6 +16,8 @@ services:
     build: 
       context: ./backend
       dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app  
     environment:
       DATABASE_URL: postgresql://travel_buddy:travel_buddy_pass@postgres:5432/travel_buddy_db
       SECRET_KEY: your_secret_key_here
@@ -23,17 +25,22 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
+    command: uvicorn travel_buddy.main:app --host 0.0.0.0 --port 8000 --reload  
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app       
+      - /app/node_modules      
     ports:
       - "3000:3000"
     depends_on:
       - backend
     env_file:
       - ./frontend/.env.local
+    command: npm run dev
 
 volumes:
-  postgres_data: 
+  postgres_data:
