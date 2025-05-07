@@ -16,7 +16,7 @@ const TripCard = (trip: Trip) => {
 
     return (
         <Link href={`/edit-trip/${trip.id}`}>
-        <Card className="overflow-hidden py-0">
+        <Card className="overflow-hidden py-0 min-w-64">
             <div className="relative h-32 w-full rounded-t-lg overflow-hidden">
                 <Image 
                     src="/pattern.png" 

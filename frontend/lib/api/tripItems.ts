@@ -1,7 +1,6 @@
-// lib/api/tripItems.ts
-
 export interface TripItem {
     id: number;
+    trip_id: number;
     title: string;
     start_date: string;
     end_date: string;
@@ -11,9 +10,9 @@ export interface TripItem {
     web_link?: string;
   }
   
-  export type NewTripItem = Omit<TripItem, 'id'>;
+  export type NewTripItem = Omit<TripItem, "id" | "trip_id">;
   
-  const BASE = 'http://localhost:8000/item';
+  const BASE = '/api/item';
     
   async function handleResponse<T>(res: Response): Promise<T> {
     if (!res.ok) {
@@ -31,7 +30,7 @@ export interface TripItem {
     }
     return token;
   }
-  
+
   export async function fetchTripItems(tripId: number): Promise<TripItem[]> {
     const token = getAuthToken();
     const res = await fetch(`${BASE}/${tripId}/items`, {
@@ -43,9 +42,9 @@ export interface TripItem {
     return handleResponse<TripItem[]>(res);
   }
   
-  export async function createTripItem(
+  export async function addTripItem(
     tripId: number,
-    data: NewTripItem
+    item: NewTripItem
   ): Promise<TripItem> {
     const token = getAuthToken();
     const res = await fetch(`${BASE}/${tripId}/items`, {
@@ -54,7 +53,7 @@ export interface TripItem {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(item),
     });
     return handleResponse<TripItem>(res);
   }
@@ -62,7 +61,7 @@ export interface TripItem {
   export async function updateTripItem(
     tripId: number,
     itemId: number,
-    data: Partial<NewTripItem>
+    item: Partial<NewTripItem>
   ): Promise<TripItem> {
     const token = getAuthToken();
     const res = await fetch(`${BASE}/${tripId}/items/${itemId}`, {
@@ -71,14 +70,14 @@ export interface TripItem {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(item),
     });
     return handleResponse<TripItem>(res);
   }
   
   export async function deleteTripItem(
     tripId: number,
-    itemId: number
+    itemId: number,
   ): Promise<void> {
     const token = getAuthToken();
     const res = await fetch(`${BASE}/${tripId}/items/${itemId}`, {
@@ -91,5 +90,9 @@ export interface TripItem {
       const errorText = await res.text();
       throw new Error(errorText);
     }
+    if (!res.ok) {
+      const errorText = await res.text();
+        throw new Error(errorText);
+      }
+      return;
   }
-  

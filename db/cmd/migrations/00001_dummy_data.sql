@@ -1,11 +1,4 @@
 -- +goose Up
-
--- Update database to fit new trip_item model
-ALTER TABLE items DROP COLUMN date;
-
-ALTER TABLE items ADD COLUMN start_date TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'UTC');
-ALTER TABLE items ADD COLUMN end_date TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'UTC');
-
 -- +goose StatementBegin
 -- Insert a test user
 INSERT INTO users (id, username, email, password_hash, phone_number, created_at)
@@ -42,6 +35,15 @@ VALUES
     (7, 3, 'Flight to Hawaii', '2025-05-15 12:00:00', '2025-05-15 12:00:00', 'transportation', 'Round trip flight from SFO to HNL', 1000.00, 'https://example.com/flight'),
     (8, 3, 'Beach resort', '2025-05-16 15:00:00', '2025-05-16 15:00:00', 'accommodation', '7 nights at Hilton Waikiki Beach', 1200.00, 'https://example.com/hotel'),
     (9, 3, 'Family dinner', '2025-05-17 19:00:00', '2025-05-17 19:00:00', 'activity', 'Family dinner at local restaurant', 60.00, NULL);
+
+
+-- Reset the items.id sequence so next insert won’t collide
+SELECT setval(
+pg_get_serial_sequence('items','id'),
+  COALESCE(MAX(id),0) + 1,
+  false
+)
+FROM items;
 -- +goose StatementEnd
 
 -- +goose Down

@@ -5,22 +5,35 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import { useEffect } from 'react';
 import { HandCoins } from 'lucide-react';
+import Image from "next/image";
+
 export default function Navbar() {
   const { isAuthenticated, logout, fetchUser, user } = useAuth();
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent immediate navigation
     alert('Please login to create a trip');
   }
+
   useEffect(() => {
     fetchUser();
-  }, [user]);
+  }, []);
 
   return (
     <nav className="w-full">
       <div className="flex w-full px-8 py-4 justify-between items-center">
-        <div className="flex flex-col items-center gap-4">
-          <h1 className="text-xl font-bold text-[#A279EA]">Travel Buddy!</h1>
-          <span className="text-lg text-[#A279EA]">your simple travel assistant</span>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center space-x-4">
+            <Image
+              src="/logo.png" 
+              alt="Travel Buddy Header Logo"
+              height={50}
+              width={50}
+              priority
+            /> 
+            <h1 className="text-4xl font-bold text-[#A279EA]">Travel Buddy</h1>
+            <span className="text-lg text-[#A279EA]"> - your simple travel planning assistant is here to help!</span>
+          </div>
+          
         </div>
         {isAuthenticated ? (
           <>

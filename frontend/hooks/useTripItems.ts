@@ -1,94 +1,41 @@
-// hooks/useTripItems.ts
 'use client';
-import { useState, useEffect, useCallback } from 'react';
-import {
-  TripItem,
-  NewTripItem,
-  fetchTripItems,
-  createTripItem,
-  updateTripItem,
-  deleteTripItem,
-} from '@/lib/api/tripItems';
+
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { TripItem, NewTripItem, fetchTripItems, updateTripItem, deleteTripItem, addTripItem } from '@/lib/api/tripItems';
 
 export function useTripItems(tripId: number) {
-  const [items, setItems] = useState<TripItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const qc = useQueryClient();
+  
+  const {
+    data: items = [],
+    isLoading,
+    error,
+  } = useQuery<TripItem[], Error>({
+    queryKey: ["tripItems", tripId],
+    queryFn: () => fetchTripItems(tripId),
+  });
 
-  const refetch = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await fetchTripItems(tripId);
-      setItems(data);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setLoading(false);
-    }
-  }, [tripId]);
+  const add = useMutation({
+    mutationFn: (item: NewTripItem) => addTripItem(tripId, item),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tripItems", tripId] }),
+  });
 
-  useEffect(() => {
-    if (tripId != null) {
-      refetch();
-    }
-  }, [tripId, refetch]);
+  const update = useMutation({
+    mutationFn: ({ id, item }: { id: number; item: NewTripItem }) => updateTripItem(tripId, id, item),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tripItems", tripId] }),
+  });
 
-  const add = useCallback(
-    async (data: NewTripItem): Promise<TripItem> => {
-      setLoading(true);
-      setError(null);
-      try {
-        const newItem = await createTripItem(tripId, data);
-        setItems((prev) => [...prev, newItem]);
-        return newItem;
-      } catch (err) {
-        setError(err as Error);
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [tripId]
-  );
+  const remove = useMutation({
+    mutationFn: (id: number) => deleteTripItem(tripId, id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["tripItems", tripId] }),
+  });
 
-  const update = useCallback(
-    async (
-      itemId: number,
-      data: Partial<NewTripItem>
-    ): Promise<TripItem> => {
-      setLoading(true);
-      setError(null);
-      try {
-        const updated = await updateTripItem(tripId, itemId, data);
-        setItems((prev) => prev.map((i) => (i.id === itemId ? updated : i)));
-        return updated;
-      } catch (err) {
-        setError(err as Error);
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [tripId]
-  );
-
-  const remove = useCallback(
-    async (itemId: number): Promise<void> => {
-      setLoading(true);
-      setError(null);
-      try {
-        await deleteTripItem(tripId, itemId);
-        setItems((prev) => prev.filter((i) => i.id !== itemId));
-      } catch (err) {
-        setError(err as Error);
-        throw err;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [tripId]
-  );
-
-  return { items, loading, error, refetch, add, update, remove };
+  return {
+    items,
+    isLoading,
+    error,
+    add: add.mutateAsync,
+    update: update.mutateAsync,
+    remove: remove.mutateAsync,
+  };
 }
