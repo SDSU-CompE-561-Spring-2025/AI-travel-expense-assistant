@@ -90,6 +90,9 @@ export interface TripItem {
       const errorText = await res.text();
       throw new Error(errorText);
     }
-    await handleResponse<void>(res);
+    if (!res.ok) {
+      const errorText = await res.text();
+        throw new Error(errorText);
+      }
+      return;
   }
-  

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker"
 import { CalendarIcon, ArrowRightIcon, ChevronDown  } from "lucide-react"
 import { TripItem, NewTripItem } from "@/lib/api/tripItems";
@@ -14,6 +14,8 @@ type ManageTripItemModalProps = {
   
 
 export default function ManageTripItemModal({ tripID, item, onClose }: ManageTripItemModalProps) {
+    /////////////////// Variables ///////////////////
+    // Item Vars
     const [itemTitle, setItemTitle] = useState<string>(item?.title ?? "");
     const [startDate, setStartDate] = useState<Date | null>(item ? new Date(item.start_date) : null);
     const [endDate, setEndDate] = useState<Date | null>(item ? new Date(item.end_date) : null);
@@ -22,14 +24,30 @@ export default function ManageTripItemModal({ tripID, item, onClose }: ManageTri
     const [activityDescription, setActivityDescription] = useState<string>(item?.description ?? "");
     const [activityExternalLink, setActivityExternalLink] = useState<string>(item?.web_link ?? "");
 
-    const { add, update } = useTripItems(tripID);
+    const [endDateError, setEndDateError] = useState<string>("");
+    const [dateError, setDateError] = useState<string | null>(null);
+    const { add, update, remove } = useTripItems(tripID);
+    
 
+    useEffect(() => {
+        if (startDate && endDate && endDate < startDate) {
+          setEndDateError("End date cannot be before start date");
+        } else {
+          setEndDateError("");
+        }
+      }, [startDate, endDate]);
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
         console.log("Trip item created: ", {itemTitle});
 
         if (!startDate || !endDate) {
             console.error("Start and end dates are required");
+            return;
+        }
+        if (endDate < startDate) {
+            setDateError("End date cannot be earlier than start date.");
             return;
         }
 
@@ -91,6 +109,7 @@ export default function ManageTripItemModal({ tripID, item, onClose }: ManageTri
                         />
                         <CalendarIcon className="w-5 h-5 text-gray-500 mr-2"/>
                     </div>
+
                     {/* Arrow Icon */}
                     <div className="p-2 rounded">
                         <ArrowRightIcon className="w-5 h-5 text-gray-500" />
@@ -111,6 +130,13 @@ export default function ManageTripItemModal({ tripID, item, onClose }: ManageTri
 
                 </div>
             </div>
+
+            {/* ────────── Show End‑Date Error ────────── */}
+            {endDateError && (
+                <p className="text-red-600 text-xs mt-1">
+                {endDateError}
+                </p>
+            )}
 
             {/* ────────────── ACTIVITY TYPE & COST ────────────── */}
             <div className="grid grid-cols-2 gap-4">
@@ -225,34 +251,77 @@ export default function ManageTripItemModal({ tripID, item, onClose }: ManageTri
                 />
             </div>
 
-            {/* ────────────── CANCEL & SAVE BUTTONS ────────────── */}
-            <div className="flex justify-end gap-2">
+            {/* ────────────── DELETE, CANCEL, SAVE BUTTONS ────────────── */}
+            <div className="flex justify-between items-center gap-2">
+                {/* DELETE */}
+                <div>
+                    {item && (
+                        <button
+                            type="button"
+                            className="
+                            px-6 
+                            py-2 
+                            border-2 
+                            border-red-400 text-red-400 
+                            rounded-lg
+                            bg-white 
+                            hover:bg-red-200
+                            transition-colors
+                            focus:outline-none focus:ring-2 focus:ring-red-300
+                            "
+                            onClick={async () => {
+                                if (!window.confirm(`Are you sure you want to delete “${item.title}”?`)) return
+                        
+                                try {
+                                    await remove(item.id)  
+                                    onClose()
+                                } catch (err) {
+                                console.error("Delete failed", err)
+                                }
+                            }}                     
+                        >
+                        Delete
+                        </button>
+                    )}
+                </div>
+
+              <div className="flex gap-2">
+
+                {/* CANCEL */}
                 <button
-                type="button"
-                onClick={onClose}
-                className="
-                px-6 
-                py-2 
-                border-2 
-                border-purple-500 
-                text-purple-500 
-                rounded-lg
-                bg-white 
-                hover:bg-purple-50 
-                transition-colors
-                focus:outline-none
-                focus:ring-2
-                focus:ring-purple-300"
+                    type="button"
+                    onClick={onClose}
+                    className="
+                    px-6 
+                    py-2 
+                    border-2 
+                    border-purple-500 
+                    text-purple-500 
+                    rounded-lg
+                    bg-white 
+                    hover:bg-purple-200 
+                    transition-colors
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-purple-300"
                 >
                 Cancel
                 </button>
-
+                
+                {/* SAVE */}
                 <button
-                type="submit"
-                className="px-6 py-2 bg-purple-400 text-white rounded-lg hover:bg-purple-500"
+                  type="submit"
+                  disabled={!!endDateError}
+                  className={`
+                    px-6 py-2 rounded-lg text-white
+                    ${endDateError ? "bg-gray-400 cursor-not-allowed" : "bg-purple-400 hover:bg-purple-500"
+                    }
+                  `}
                 >
-                Save
-                </button>                    
+                  Save
+                </button>
+              </div>
+
             </div>
         </form>
         </>

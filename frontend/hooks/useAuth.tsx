@@ -80,25 +80,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const fetchUser = async (token?: string | null  ) => {
-    if (!token || !isAuthenticated){
+  const fetchUser = async () => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
       setUser(null);
+      setIsAuthenticated(false);
       return;
     }
-
-    const response = await fetch('http://localhost:8000/user/me', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
+    
+    const response = await fetch("http://localhost:8000/user/me", {
+      headers: { Authorization: `Bearer ${token}` }
     });
 
     if (!response.ok) {
-      throw new Error('Unauthorized');
+      setUser(null);
+      setIsAuthenticated(false);
+      return;
     }
 
     const data: User = await response.json();
     console.log(data);
     setUser(data);
+    setIsAuthenticated(true);
   }
   
 

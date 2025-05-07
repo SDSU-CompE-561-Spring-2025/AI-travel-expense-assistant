@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Navbar from "@/components/navbar";
 import EditTrip from "@/components/EditTrip";
 import ManageTripItemModal from "@/components/manage-trip-item-modal";
+import TripItemHeader from "@/components/trip-item-header";
 import { Trip } from "@/hooks/useTrips";
 import { TripItem } from "@/lib/api/tripItems";
 import { useTripItems } from "@/hooks/useTripItems";
@@ -35,14 +36,53 @@ export default function EditTripPage() {
   const [isCreating, setIsCreating] = useState(false);
 
   // Group items by day
-  const groups = items.reduce((acc: Record<string, TripItem[]>, item) => {
-    const dayKey = item.start_date.split('T')[0];
-    acc[dayKey] = acc[dayKey] ?? [];
-    acc[dayKey].push(item);
+  const groups = useMemo(() => {
+    const acc: Record<string, TripItem[]> = {};
+    items.forEach(item => {
+      const start = new Date(item.start_date);
+      const end   = new Date(item.end_date);
+      for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+        // format YYYY-MM-DD in local time
+        const y = dt.getFullYear();
+        const m = String(dt.getMonth() + 1).padStart(2, "0");
+        const d = String(dt.getDate()).padStart(2, "0");
+        const key = `${y}-${m}-${d}`;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(item);
+      }
+    });
     return acc;
-  }, {});
+  }, [items]);
 
-  const sortedDays = Object.keys(groups).sort();
+  // Sort by start date time stamps
+  const sortedDays = useMemo(() => {
+    const keys = Object.keys(groups);
+    if (!keys.length) return [];
+
+    // sort the existing dates
+    keys.sort((a, b) => {
+      const [yA, mA, dA] = a.split("-").map(Number);
+      const [yB, mB, dB] = b.split("-").map(Number);
+      return new Date(yA, mA - 1, dA).getTime() - new Date(yB, mB - 1, dB).getTime();
+    });
+
+    const [startKey, endKey] = [keys[0], keys[keys.length - 1]];
+    const [y1, m1, d1] = startKey.split("-").map(Number);
+    const [y2, m2, d2] = endKey.split("-").map(Number);
+    const start = new Date(y1, m1 - 1, d1);
+    const end = new Date(y2, m2 - 1, d2);
+
+    const all: string[] = [];
+    for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+      // MANUAL LOCAL FORMAT: avoids timezone shift bugs
+      const y = dt.getFullYear();
+      const m = String(dt.getMonth() + 1).padStart(2, "0");
+      const d = String(dt.getDate()).padStart(2, "0");
+      all.push(`${y}-${m}-${d}`);
+    }
+    return all;
+  }, [groups]);
+
   const categories = ['activity', 'transportation', 'accommodation'] as const;
 
   const closeModal = () => {
@@ -108,21 +148,26 @@ export default function EditTripPage() {
           </button>
         </div>
 
+        <TripItemHeader/>
+
         {/* Loading/Error */}
         {isLoading && <p>Loading items...</p>}
         {error && <p className="text-red-600">Error: {error.message}</p>}
 
         {/* Items by day */}
         <section className="space-y-4">
-          {sortedDays.map((day, index) => {
-            const itemsForDay = groups[day];
-            const dateObj = new Date(day);
+        {sortedDays.map((day, index) => {
+          // if a date had no items, fall back to an empty array
+          const itemsForDay = groups[day] ?? [];            // split "YYYY-MM-DD" into numbers, then build a local Date
+          const [year, month, dayOfMonth] = day.split('-').map(Number)
+          const dateObj = new Date(year, month - 1, dayOfMonth)
+
             return (
               <div key={day} className="flex border rounded-lg overflow-hidden">
                 <div className="w-32 bg-gray-100 p-4 border-r">
                   <div className="font-semibold">Day {index + 1}</div>
                   <div className="text-sm">
-                    {dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                  {dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                   </div>
                 </div>
                 {categories.map((cat) => (
@@ -148,8 +193,8 @@ export default function EditTripPage() {
 
       {/* ManageTripItemModal for create/edit */}
       {(isCreating || selectedItem) && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        <div className="fixed inset-0 z-40 bg-black/50 flex items-center justify-center">
+          <div className="bg-white border-4 border-purple-500 rounded-lg shadow-2xl w-full max-w-md p-6">
             <ManageTripItemModal
               tripID={tripId}
               item={selectedItem ?? undefined}

@@ -16,7 +16,7 @@ export default function Navbar() {
 
   useEffect(() => {
     fetchUser();
-  }, [user]);
+  }, []);
 
   return (
     <nav className="w-full">
