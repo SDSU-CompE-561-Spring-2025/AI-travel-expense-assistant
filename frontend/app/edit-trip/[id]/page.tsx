@@ -21,9 +21,10 @@ import { useParams } from "next/navigation";
 export default function EditTripPage() {
   const params = useParams();
   const tripId = Number(params.id);
+  console.log(tripId);
   const [token, setToken] = useState<string | null>("");
   const [trip,setTrip] = useState<Trip>({
-    id: -1,
+    id: tripId,
     title: "",
     description: "",
     start_date: new Date().toString(),
@@ -53,9 +54,9 @@ export default function EditTripPage() {
 
   useEffect(() => {
       setToken(localStorage.getItem('access_token'));
-      const createTrip = async () => {
+      const fetchTrip = async () => {
         try{
-          const response = await fetch(`http://localhost:8000/trips/${tripId}/edit`, {
+          const response = await fetch(`http://localhost:8000/trips/${trip.id}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -68,6 +69,7 @@ export default function EditTripPage() {
           console.error("Failed to create trip", err);
         }
       }
+      fetchTrip();
     },[]);
 
   return (

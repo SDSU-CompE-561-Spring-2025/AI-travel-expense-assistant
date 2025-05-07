@@ -29,7 +29,7 @@ export default function MyForm() {
   const tripId = Number(params.id);
   const [token, setToken] = useState<string | null>("");
   const [trip,setTrip] = useState<Trip>({
-    id: -1,
+    id: tripId,
     title: "",
     description: "",
     start_date: new Date().toString(),
@@ -48,9 +48,9 @@ export default function MyForm() {
 
   useEffect(() => {
     setToken(localStorage.getItem('access_token'));
-    const createTrip = async () => {
+    const fetchTrip = async () => {
       try{
-        const response = await fetch(`http://localhost:8000/trips/${tripId}/edit`, {
+        const response = await fetch(`http://localhost:8000/trips/${trip.id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -59,11 +59,19 @@ export default function MyForm() {
         })
         const oldTrip = await response.json();
         setTrip(oldTrip);
+        form.reset({
+          id: oldTrip.id,
+          title: oldTrip.title,
+          description: oldTrip.description,
+          start_date: oldTrip.start_date ? new Date(oldTrip.start_date) : new Date(),
+          end_date: oldTrip.end_date ? new Date(oldTrip.end_date) : new Date(),
+        });
       }catch(err){
         console.error("Failed to create trip", err);
       }
     }
-  },[]);
+    fetchTrip();
+  },[form]);
 
   async function onSubmit(values: z.infer < typeof formSchema > ) {
     try{
@@ -94,7 +102,7 @@ export default function MyForm() {
               <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input 
-                placeholder="Trip title"
+              placeholder= {trip.title}
                 
                 type=""
                 {...field} />
@@ -116,7 +124,7 @@ export default function MyForm() {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Trip description"
+                  placeholder={trip.description}
                   className="resize-none"
                   {...field}
                 />
@@ -159,7 +167,7 @@ export default function MyForm() {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
-                selected={field.value}
+                selected={new Date(trip.start_date)}
                 onSelect={field.onChange}
                 initialFocus
               />
@@ -202,7 +210,7 @@ export default function MyForm() {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
-                selected={field.value}
+                selected={new Date(trip.end_date)}
                 onSelect={field.onChange}
                 initialFocus
               />

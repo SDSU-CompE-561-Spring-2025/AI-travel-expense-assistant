@@ -40,7 +40,7 @@ def get_trip_by_id(
 ):
     return trip_service.get_trip_by_id(db,id)
 
-@router.patch("/trips/{id}/edit", response_model=TripResponse)
+@router.patch("/trips/edit-trip/{id}", response_model=TripResponse)
 def update_trip(
     db: Session = Depends(get_db),
     id: int=-1,
