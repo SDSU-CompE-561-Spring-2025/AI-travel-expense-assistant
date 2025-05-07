@@ -11,13 +11,13 @@ class ItemType(str, enum.Enum):
     other = "other"
 
 class ItemCreate(BaseModel):
-    title: constr(min_length=3, max_length=100, pattern=r"^[a-zA-Z0-9\s_]+$")
+    title: constr(min_length=3, max_length=100)
     start_date: datetime
     end_date: datetime
     item_type: ItemType
-    description: Optional[constr(max_length=300)]
+    description: Optional[constr(max_length=300)] = None
     cost: float = Field(..., ge=0)
-    web_link: Optional[HttpUrl] 
+    web_link: Optional[constr(pattern=r'^https?://.+')] = None
 
 class ItemResponse(ItemCreate):
     id: int
@@ -25,3 +25,12 @@ class ItemResponse(ItemCreate):
 
     class Config:
         from_attributes = True 
+
+class ItemUpdate(BaseModel):
+    title: Optional[constr(min_length=3, max_length=100)] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
+    item_type: Optional[ItemType] = None
+    description: Optional[constr(max_length=300)] = None
+    cost: Optional[float] = Field(None, ge=0)
+    web_link: Optional[constr(pattern=r'^https?://.+')] = None

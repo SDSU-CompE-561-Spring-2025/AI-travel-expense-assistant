@@ -4,9 +4,16 @@ import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { useEffect } from 'react';
+import { HandCoins } from 'lucide-react';
 import Image from "next/image";
+
 export default function Navbar() {
   const { isAuthenticated, logout, fetchUser, user } = useAuth();
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent immediate navigation
+    alert('Please login to create a trip');
+  }
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -31,7 +38,7 @@ export default function Navbar() {
         {isAuthenticated ? (
           <>
           <span>
-            {user?.username}
+            Welcome, {user?.username}!
           </span>
           <Button variant="outline" onClick={logout}>
             Logout
@@ -39,21 +46,23 @@ export default function Navbar() {
 
           </>
         ) : (
+          <>
+          <span>
+            Welcome!
+          </span>
           <Link href="/login">
             <Button className="text-white bg-slate-900">Sign In</Button>
           </Link>
+          </>
         )}
       </div>
       <div className="flex px-8 w-full justify-between items-center bg-[#A279EA]">
         <div className="flex items-center gap-4 py-4">
           <Link href="/" className="text-white hover:text-gray-200">Home</Link>
-          {isAuthenticated && (
-            <>
-            <Link href="/new-trip" className="text-white hover:text-gray-200">New Trip</Link>
-            <Link href="/calendar" className="text-white hover:text-gray-200">Calendar view</Link>
-            <Link href="/recommendations" className="text-white hover:text-gray-200">Recommendations</Link>
-            </>
-          )}
+          {isAuthenticated ? (<Link href="/new-trip" className="text-white hover:text-gray-200">New Trip</Link>) :
+          (<Link href="" onClick={handleClick} className="text-white hover:text-gray-200">New Trip</Link>)}
+          <Link href="/calendar" className="text-white hover:text-gray-200">Calendar view</Link>
+          <Link href="/recommendations" className="text-white hover:text-gray-200">Recommendations</Link>
         </div>
         <span>
           <Link href="/support" className="text-white hover:text-gray-200">Support</Link>

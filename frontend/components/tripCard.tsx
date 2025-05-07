@@ -15,7 +15,7 @@ const TripCard = (trip: Trip) => {
     const daysUntilTrip = getDaysUntilTrip();
 
     return (
-        <Link href={`/trips/${trip.id}`}>
+        <Link href={`/edit-trip/${trip.id}`}>
         <Card className="overflow-hidden py-0 min-w-64">
             <div className="relative h-32 w-full rounded-t-lg overflow-hidden">
                 <Image 
