@@ -21,6 +21,7 @@ export function SignupForm() {
   });
 
   const [usernameWarning, setUsernameWarning] = useState(false);
+  const [emailWarning, setEmailWarning] = useState(false); // NEW
   const [passwordValue, setPasswordValue] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -31,6 +32,11 @@ export function SignupForm() {
       const hasSpecialChars = /[^a-zA-Z0-9_]/.test(value);
       setUsernameWarning(hasSpecialChars);
       if (hasSpecialChars) return;
+    }
+
+    if (name === "email") {
+      const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); // NEW
+      setEmailWarning(!isValidEmail); // NEW
     }
 
     if (name === "password") {
@@ -109,7 +115,7 @@ export function SignupForm() {
         <Input
           id="username"
           name="username"
-          placeholder="yourusername"
+          placeholder="username"
           value={formData.username}
           onChange={handleChange}
           required
@@ -130,6 +136,9 @@ export function SignupForm() {
           onChange={handleChange}
           required
         />
+        {emailWarning && (
+          <p className="text-sm text-red-500">Please enter a valid email address</p> // NEW
+        )}
       </div>
 
       <div className="space-y-2">
@@ -156,12 +165,12 @@ export function SignupForm() {
           value={formData.confirmPassword}
           onChange={handleChange}
           required
-          />
-          {formData.confirmPassword &&
+        />
+        {formData.confirmPassword &&
           formData.confirmPassword !== formData.password && (
-          <p className="text-sm text-red-500">Passwords do not match</p>
-          )}
-          </div>
+            <p className="text-sm text-red-500">Passwords do not match</p>
+        )}
+      </div>
 
       <div className="flex items-center space-x-2">
         <Checkbox
