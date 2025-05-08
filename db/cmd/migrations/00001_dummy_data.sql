@@ -16,7 +16,7 @@ INSERT INTO trips (id, user_id, title, start_date, end_date, description, total_
 VALUES 
     (1, 1, 'Business Trip to New York', '2024-03-01 00:00:00', '2024-03-05 00:00:00', 'Annual business review meeting', 595.00),
     (2, 1, 'Conference in San Francisco', '2024-04-10 00:00:00', '2024-04-15 00:00:00', 'Tech conference and networking', 825.00),
-    (3, 1, 'Family Vacation to Hawaii', '2025-05-15 00:00:00', '2025-05-22 00:00:00', 'Family reunion and beach vacation', 1500.00);
+    (3, 1, 'Family Vacation to Hawaii', '2025-05-16 00:00:00', '2025-05-22 00:00:00', 'Family reunion and beach vacation', 1500.00);
 
 
 -- Insert items for the first trip
@@ -34,7 +34,7 @@ VALUES
     (6, 2, 'Conference registration', '2024-04-11 09:00:00', '2024-04-11 09:00:00', 'activity', 'Full conference pass', 75.00, 'https://example.com/conference'),
     (7, 3, 'Flight to Hawaii', '2025-05-15 12:00:00', '2025-05-15 12:00:00', 'transportation', 'Round trip flight from SFO to HNL', 1000.00, 'https://example.com/flight'),
     (8, 3, 'Beach resort', '2025-05-16 15:00:00', '2025-05-16 15:00:00', 'accommodation', '7 nights at Hilton Waikiki Beach', 1200.00, 'https://example.com/hotel'),
-    (9, 3, 'Family dinner', '2025-05-17 19:00:00', '2025-05-17 19:00:00', 'activity', 'Family dinner at local restaurant', 60.00, NULL);
+    (9, 3, 'Family dinner', '2025-05-21 19:00:00', '2025-05-21 19:00:00', 'activity', 'Family dinner at local restaurant', 60.00, NULL);
 
 
 -- Reset the items.id sequence so next insert won’t collide
