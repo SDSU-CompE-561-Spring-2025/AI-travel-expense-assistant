@@ -21,6 +21,8 @@ This project's backend uses:
 - PostgreSQL
 - hatch/uv (optional)
 
+These instructions should be functional, but please look at the README for the overall application (root folder) for better instruction.
+
 ## Installation & Usage
 
 Start by opening a terminal in the backend directory. Then do the Following.
@@ -32,8 +34,9 @@ hatch shell
 
 Create .env file to define used secret/non-secret variables. It should have these variables in it. 
 ```console
-DATABASE_URL = "sqlite:///./sql_travel_buddy.db"
-SECRET_KEY = ""
+  NEXT_PUBLIC_API_URL="http://localhost:8000"
+  NEXT_PUBLIC_APP_URL="http://localhost:3000"
+  NODE_ENV="production"
 ```
 
 Once the above is completed. Start local webserver:
