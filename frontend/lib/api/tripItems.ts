@@ -12,7 +12,7 @@ export interface TripItem {
   
   export type NewTripItem = Omit<TripItem, "id" | "trip_id">;
   
-  const BASE = '/api/item';
+  const BASE = 'http://localhost:8000/item';
     
   async function handleResponse<T>(res: Response): Promise<T> {
     if (!res.ok) {
