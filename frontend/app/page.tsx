@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import Footer from "@/components/footer";
+import HomePagePreLogin from "@/components/prelogin-home";
 
 export default function Home() {
   const [token,setToken] = useState<string | null>("");
@@ -27,7 +28,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="flex flex-col gap-3 mt-12 justify-center items-center">
+      <main className={`flex flex-col gap-3 ${ user ? "mt-12" : "mt-0" } justify-center items-center`}>
         <div className="flex gap-4 w-full items-center justify-center flex-wrap">
           {trips.map((trip) => (
             <TripCard key={trip.id} {...trip} />
@@ -51,9 +52,7 @@ export default function Home() {
             )}
           </>
         ) : (
-          <span className="text-lg text-gray-500 h-64 mt-20">
-            Login or signup to view and create trips
-          </span>
+          <HomePagePreLogin />
         )}
       </main>
   
