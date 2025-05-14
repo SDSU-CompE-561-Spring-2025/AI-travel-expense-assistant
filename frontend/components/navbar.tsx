@@ -38,26 +38,27 @@ export default function Navbar() {
           </div>
           
         </div>
-        {isAuthenticated ? (
-          <>
-          <span>
-            Welcome, {user?.username}!
-          </span>
-          <Button variant="outline" onClick={logout}>
-            Logout
-          </Button>
+        <div className="flex items-center gap-3">
+          {isAuthenticated ? (
+            <>
+            <span>
+              Welcome, {user?.username}!
+            </span>
+            <Button variant="outline" onClick={logout}>
+              Logout
+            </Button>
 
-          </>
-        ) : (
-          <>
-          <span>
-            Welcome!
-          </span>
-          <Link href="/login">
-            <Button className="text-white bg-slate-900">Sign In</Button>
-          </Link>
+            </>
+          ) : (
+            <>
+            <span>
+            </span>
+            <Link href="/login">
+              <Button className="text-white bg-slate-900">Sign In</Button>
+            </Link>
           </>
         )}
+        </div>
       </div>
       <div className="flex px-8 w-full justify-between items-center bg-[#A279EA]">
         <div className="flex items-center gap-4 py-4">
