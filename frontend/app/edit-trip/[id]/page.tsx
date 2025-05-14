@@ -9,6 +9,7 @@ import { Trip } from "@/hooks/useTrips";
 import { TripItem } from "@/lib/api/tripItems";
 import { useTripItems } from "@/hooks/useTripItems";
 import { useParams } from "next/navigation";
+import Footer from "@/components/footer";
 
 // Placeholder trip data—swap out for real fetch or route-based data as needed
 // const dummyTrip: Trip = {
@@ -184,6 +185,7 @@ export default function EditTripPage() {
           </div>
         </div>
       )}
+      <Footer />
     </>
   );
 }
