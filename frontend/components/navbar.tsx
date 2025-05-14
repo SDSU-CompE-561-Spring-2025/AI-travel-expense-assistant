@@ -4,10 +4,12 @@ import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation'
 import { HandCoins } from 'lucide-react';
 import Image from "next/image";
 
 export default function Navbar() {
+  const location = usePathname();
   const { isAuthenticated, logout, fetchUser, user } = useAuth();
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent immediate navigation
@@ -59,14 +61,14 @@ export default function Navbar() {
       </div>
       <div className="flex px-8 w-full justify-between items-center bg-[#A279EA]">
         <div className="flex items-center gap-4 py-4">
-          <Link href="/" className="text-white hover:text-gray-200">Home</Link>
-          {isAuthenticated ? (<Link href="/new-trip" className="text-white hover:text-gray-200">New Trip</Link>) :
+          <Link href="/" className={`${location === '/' ? 'bg-white text-[#A279EA] border border-white px-4 rounded' : 'text-white hover:text-gray-200'}`}>Home</Link>
+          {isAuthenticated ? (<Link href="/new-trip" className={`${location === '/new-trip' ? 'bg-white text-[#A279EA] border border-white px-4 rounded' : 'text-white hover:text-gray-200'}`}>New Trip</Link>) :
           (<Link href="" onClick={handleClick} className="text-white hover:text-gray-200">New Trip</Link>)}
-          <Link href="/calendar" className="text-white hover:text-gray-200">Calendar view</Link>
-          <Link href="/recommendations" className="text-white hover:text-gray-200">Recommendations</Link>
+          <Link href="/calendar" className={`${location === '/calendar' ? 'bg-white text-[#A279EA] border border-white px-4 rounded' : 'text-white hover:text-gray-200'}`}>Calendar view</Link>
+          <Link href="/recommendations" className={`${location === '/recommendations' ? 'bg-white text-[#A279EA] border border-white px-4 rounded' : 'text-white hover:text-gray-200'}`}>Recommendations</Link>
         </div>
         <span>
-          <Link href="/support" className="text-white hover:text-gray-200">Support</Link>
+          <Link href="/support" className={`${location === '/support' ? 'bg-white text-[#A279EA] border border-white px-4 rounded' : 'text-white hover:text-gray-200'}`}>Support</Link>
         </span>
       </div>
     </nav>
